@@ -1,33 +1,35 @@
 'use strict';
 const {
-  Model
+  Model,DataTypes
 } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize) => {
   class User extends Model {
-    async createUser(data) {
+    static async createUser(data) {
       const userCreate = await this.create(data);
       return userCreate;
     }
-    async updateUser(userId, data) {
+    static async updateUser(userId, data) {
       const user = await this.findByPk(userId);
+    
       if (!user) {
-        throw new Error('Bus operator not found');
+        throw new Error('User not found');
       }
+    
       await user.update(data);
       return user;
     }
-    async deleteUser(userId) {
+    static async deleteUser(userId) {
       const user = await this.findByPk(userId);
       if (!user) {
-        throw new Error('Bus operator not found');
+        throw new Error('User operator not found');
       }
       await user.destroy();
-      return user;
+      return user
     }
-    async getUserById(userId) {
+    static async showOneUser(userId) {
       return await this.findByPk(userId);
     }
-    async getAllUser() {
+    static async showAllUser() {
       return await this.findAll();
     }
   

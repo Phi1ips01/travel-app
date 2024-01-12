@@ -1,33 +1,35 @@
 'use strict';
 const {
-  Model
+  Model,DataTypes
 } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize) => {
   class Trip extends Model {
-    async createTrip(data) {
+    static async createTrip(data) {
       const tripCreate = await this.create(data);
       return tripCreate;
     }
-    async updateTrip(tripId, data) {
+    static async updateTrip(tripId, data) {
       const trip = await this.findByPk(tripId);
+    
       if (!trip) {
-        throw new Error('Trip not found');
+        throw new Error('trip not found');
       }
+    
       await trip.update(data);
       return trip;
     }
-    async deleteTrip(tripId) {
+    static async deleteTrip(tripId) {
       const trip = await this.findByPk(tripId);
       if (!trip) {
-        throw new Error('Trip not found');
+        throw new Error('trip operator not found');
       }
       await trip.destroy();
       return trip
     }
-    async getTripById(tripId) {
+    static async showOneTrip(tripId) {
       return await this.findByPk(tripId);
     }
-    async getAllTrip() {
+    static async showAllTrip() {
       return await this.findAll();
     }
   
@@ -37,8 +39,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   Trip.init({
     operator_id: DataTypes.INTEGER,
-    trip_id: DataTypes.INTEGER,
     bus_id: DataTypes.INTEGER,
+    trip_id: DataTypes.INTEGER,
     customer_name: DataTypes.STRING,
     contact: DataTypes.STRING,
     alternate_contact: DataTypes.STRING,

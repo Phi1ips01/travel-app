@@ -8,10 +8,10 @@ const {
   showOneBusHandler
 } = require('./handler')
 
-router.post("/addNewBus", createBusHandler);
-router.get("/showAllBus", showAllBusHandler );
-router.get("/showOneBus", showOneBusHandler);
-router.put('/updateBus', updateBusHandler);
-router.delete("/deleteBus",destroyBusHandler);
+router.post("/add", createBusHandler);
+router.get("/showAll", showAllBusHandler );
+router.get("/showOne", showOneBusHandler);
+router.put('/update', updateBusHandler);
+router.delete("/delete",destroyBusHandler);
 
 module.exports = router

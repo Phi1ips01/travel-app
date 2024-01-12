@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const { sequelize } = require('../../models');
-const User = require('../../models/user')(sequelize)
+const User = require('../../models/users')(sequelize)
 
 async function createControllerUser(data){
     try{

@@ -1,7 +1,6 @@
 
 const express = require('express');
 const app = express();
-
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const busOperator = require('../src/bus_operator/router')
@@ -10,6 +9,7 @@ const user = require('../src/user/router')
  const trip = require('../src/trip/router')
 
 const port = 3000 ;
+app.use(cors)
 app.use(bodyParser.json())
 const busRouter = require('../src/bus/router');
 

@@ -7,18 +7,18 @@ const busOperator = require('../src/bus_operator/router')
 const operatorUpdate = require('../src/operator_update/router')
 const user = require('../src/user/router')
  const trip = require('../src/trip/router')
+ const busRouter = require('../src/bus/router');
 
 const port = 3000 ;
-app.use(cors)
+
 app.use(bodyParser.json())
-const busRouter = require('../src/bus/router');
 
 app.use('/bus', busRouter);
 app.use('/busOperator',busOperator)
 app.use('/operatorUpdate',operatorUpdate)
 app.use('/user',user)
 app.use('/trip',trip)
-
+app.use(cors)
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });

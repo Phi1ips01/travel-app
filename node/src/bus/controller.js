@@ -4,6 +4,7 @@ const Bus = require('../../models/bus')(sequelize)
 
 async function createControllerBus(data){
     try{
+      console.log("controller")
     const response = await Bus.createBus(data)
     return response
     }

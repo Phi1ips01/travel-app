@@ -9,6 +9,7 @@ const {
 async function createBusHandler(req,res)
 {
     try{
+        console.log("handler")
         const busData = {
             bus_operator_id:req.body.bus_operator_id,
             bus_id:req.body.bus_id,

@@ -7,7 +7,7 @@ const {
   showAllBusHandler,
   showOneBusHandler
 } = require('./handler')
-
+console.log("router")
 router.post("/add", createBusHandler);
 router.get("/showAll", showAllBusHandler );
 router.get("/showOne", showOneBusHandler);

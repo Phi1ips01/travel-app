@@ -11,7 +11,10 @@ const user = require('../src/user/router')
 
 const port = 3000 ;
 app.use(bodyParser.json())
-app.use(cors)
+app.use(cors({
+  
+  methods: 'GET,POST,PUT,DELETE', // Allow additional methods
+}));
 console.log("server")
 app.use('/bus', busRouter);
 app.use('/busOperator',busOperator)

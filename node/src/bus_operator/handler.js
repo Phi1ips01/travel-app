@@ -12,7 +12,11 @@ async function createBusOperatorHandler(req,res)
         const busOperatorData = {
             bus_operator_id: req.body.bus_operator_id,
             name: req.body.name,
-            contact: req.body.contact
+            contact: req.body.contact,
+            total_amount: req.body.total_amount,
+            profit: req.body.profit,
+            paid: req.body.paid,
+            remaining_payment:req.body.remaining_payment
         };
         const response = await createControllerBusOperator(busOperatorData);
         res.status(201).json({response:response});
@@ -27,7 +31,9 @@ async function updateBusOperatorHandler(req,res)
         const busOperatorData = {
             bus_operator_id: req.body.bus_operator_id,
             name: req.body.name,
-            contact: req.body.contact
+            contact: req.body.contact,
+            total_amount: req.body.total_amount,
+            profit: req.body.profit
         };
         const response = await updateControllerBusOperator(id, busOperatorData);
     res.status(200).json({ response });

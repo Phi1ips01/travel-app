@@ -45,12 +45,17 @@ module.exports = (sequelize) => {
     contact: DataTypes.STRING,
     alternate_contact: DataTypes.STRING,
     starting_point: DataTypes.STRING,
+    boarding_point: DataTypes.STRING,
     destination_point: DataTypes.STRING,
+    seat_numbers:DataTypes.STRING,
     address: DataTypes.STRING,
+    date_of_journey:DataTypes.DATE,
     age: DataTypes.INTEGER,
     number_of_tickets: DataTypes.INTEGER,
     total_amount: DataTypes.INTEGER,
-    paid: DataTypes.INTEGER
+    paid: DataTypes.INTEGER,
+    remarks: DataTypes.STRING,
+    agents: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Trip',

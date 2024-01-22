@@ -46,7 +46,9 @@ module.exports = (sequelize) => {
     bus_id: DataTypes.INTEGER,
     name: DataTypes.STRING,
     type: DataTypes.STRING,
-    share: DataTypes.INTEGER
+    share: DataTypes.INTEGER,
+    total_amount: DataTypes.INTEGER,
+    share_deducted_amount: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Bus',

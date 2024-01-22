@@ -4,6 +4,7 @@ const {
 } = require('sequelize');
 module.exports = (sequelize) => {
   class Bus_operator extends Model {
+    
     static async createBusOperator(data) {
       const busOperatorCreate = await this.create(data);
       return busOperatorCreate;
@@ -40,7 +41,11 @@ module.exports = (sequelize) => {
   Bus_operator.init({
     bus_operator_id: DataTypes.INTEGER,
     name: DataTypes.STRING,
-    contact: DataTypes.STRING
+    contact: DataTypes.STRING,
+    total_amount: DataTypes.INTEGER,
+    profit: DataTypes.INTEGER,
+    paid: DataTypes.INTEGER,
+    remaining_payment: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Bus_operator',

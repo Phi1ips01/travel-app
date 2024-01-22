@@ -17,12 +17,17 @@ async function createTripHandler(req,res)
             contact:req.body.contact ,
             alternate_contact:req.body.alternate_contact ,
             starting_point:req.body.starting_point ,
+            boarding_point:req.body.boarding_point,
             destination_point:req.body.destination_point ,
+            seat_numbers:req.body.seat_numbers,
             address:req.body.address,
+            date_of_journey:req.body.date_of_journey,
             age: req.body.age,
             number_of_tickets:req.body.number_of_tickets ,
             total_amount: req.body.total_amount,
-            paid: req.body.paid
+            paid: req.body.paid,
+            remarks: req.body.remarks,
+            agents: req.body.agents,
         };
         const response = await createControllerTrip(TripData);
         res.status(201).json({response:response});
@@ -42,12 +47,17 @@ async function updateTripHandler(req,res)
             contact:req.body.contact ,
             alternate_contact:req.body.alternate_contact ,
             starting_point:req.body.starting_point ,
+            boarding_point:req.body.boarding_point,
             destination_point:req.body.destination_point ,
+            seat_numbers:req.body.seat_numbers,
             address:req.body.address,
+            date_of_journey:req.body.date_of_journey,
             age: req.body.age,
             number_of_tickets:req.body.number_of_tickets ,
             total_amount: req.body.total_amount,
-            paid: req.body.paid
+            paid: req.body.paid,
+            remarks: req.body.remarks,
+            agents: req.body.agents,
         };
         const response = await updateControllerTrip(id, TripData);
     res.status(200).json({ response });

@@ -12,13 +12,13 @@ const user = require('../src/user/router')
 const port = 3000 ;
 
 app.use(bodyParser.json())
+app.use(cors())
 
 app.use('/bus', busRouter);
 app.use('/busOperator',busOperator)
 app.use('/operatorUpdate',operatorUpdate)
 app.use('/user',user)
 app.use('/trip',trip)
-app.use(cors)
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });

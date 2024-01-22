@@ -15,7 +15,9 @@ async function createBusHandler(req,res)
             bus_id:req.body.bus_id,
             name:req.body.name,
             type: req.body.type,
-            share:req.body.share
+            share:req.body.share,
+            total_amount: req.body.total_amount,
+            share_deducted_amount: req.body.share_deducted_amount
         };
         const response = await createControllerBus(busData);
         res.status(201).json({response:response});
@@ -32,7 +34,9 @@ async function updateBusHandler(req,res)
             bus_id:req.body.bus_id,
             name:req.body.name,
             type: req.body.type,
-            share:req.body.share
+            share:req.body.share,
+            total_amount: req.body.total_amount,
+            share_deducted_amount: req.body.share_deducted_amount
         };
         const response = await updateControllerBus(id, busData);
     res.status(200).json({ response });

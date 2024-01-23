@@ -1,12 +1,12 @@
-'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.addColumn('trips', 'date_of_journey', {
       type: Sequelize.DATE,
-      allowNull:false,
-      after:'address'
+      allowNull: false,
+      defaultValue: new Date('1970-01-01'), // Set a valid default date
+      after: 'address',
     });
       await queryInterface.addColumn('trips', 'boarding_point', {
         type: Sequelize.STRING,
@@ -30,31 +30,37 @@ module.exports = {
     await queryInterface.addColumn('buses', 'total_amount', {
       type: Sequelize.INTEGER,
       allowNull:false,
+      defaultValue: 0,
       after:'share',
     }); 
     await queryInterface.addColumn('buses', 'share_deducted_amount', {
       type: Sequelize.INTEGER,
       allowNull:false,
+      defaultValue: 0,
       after:'total_amount'
     }); 
     await queryInterface.addColumn('bus_operators', 'total_amount', {
       type: Sequelize.INTEGER,
       allowNull:false,
+      defaultValue: 0,
       after:'contact'
     }); 
     await queryInterface.addColumn('bus_operators', 'profit', {
       type: Sequelize.INTEGER,
       allowNull:false,
+      defaultValue: 0,
       after:'total_amount'
     }); 
     await queryInterface.addColumn('bus_operators', 'paid', {
       type: Sequelize.INTEGER,
       allowNull:false,
+      defaultValue: 0,
       after:'profit'
     }); 
     await queryInterface.addColumn('bus_operators', 'remaining_payment', {
       type: Sequelize.INTEGER,
       allowNull:false,
+      defaultValue: 0,
       after:'paid'
     }); 
 

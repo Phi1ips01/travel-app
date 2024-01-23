@@ -9,6 +9,34 @@ module.exports = (sequelize) => {
       const busOperatorCreate = await this.create(data);
       return busOperatorCreate;
     }
+    static async updateTotalAmountAndProfitBusOperator(busOperatorID, busTotalAmount, busProfit) {
+    try {
+        const busOperator = await this.findOne({ where: { bus_operator_id: busOperatorID } });
+
+        if (!busOperator) {
+            throw new Error('Bus Operator not found');
+        }
+
+        // Calculate new total_amount for bus_operator
+        const newTotalAmount = busOperator.total_amount + busTotalAmount;
+
+        // Calculate new profit for bus_operator
+        const newProfit = busOperator.profit + (busTotalAmount - busProfit);
+
+        // Update Bus_Operators table
+        await this.update(
+            {
+                total_amount: newTotalAmount,
+                profit: newProfit,
+            },
+            { where: { bus_operator_id: busOperatorID } }
+        );
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error updating Bus Operator');
+    }
+}
+
     static async updateBusOperator(busOperatorId, data) {
       const busOperator = await this.findByPk(busOperatorId);
     

@@ -17,6 +17,29 @@ module.exports = (sequelize) => {
       await bus.update(data);
       return bus;
     }
+    static async updateTotalAmountAndShareDeductedBus(busID, data) {
+      try {
+          const bus = await this.findOne({ where: { bus_id: busID } });
+          if (!bus) {
+              throw new Error('Bus not found');
+          }
+          // Calculate new total_amount
+          const newTotalAmount = bus.total_amount + data.total_amount;
+          // Calculate share_deducted_amount
+          const newShareDeductedAmount = newTotalAmount - (newTotalAmount * bus.share) / 100;
+          // Update Buses table
+          await this.update(
+              {
+                  total_amount: newTotalAmount,
+                  share_deducted_amount: newShareDeductedAmount,
+              },
+              { where: { bus_id: busID } }
+          );
+      } catch (error) {
+          console.error(error);
+          throw new Error('Error updating Buses');
+      }
+  }
     static async deleteBus(busId) {
       const bus = await this.findByPk(busId);
       if (!bus) {

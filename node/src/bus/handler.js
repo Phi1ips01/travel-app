@@ -5,19 +5,23 @@ const {
     showOneControllerBus,
     destroyControllerBus
 } = require('./controller')
-
+const {bus_operators,buses} = require("../../models")
 async function createBusHandler(req,res)
 {
     try{
         console.log("handler")
+        const operator_id = req.body.operator_id
+        const operator = await bus_operators.findOne({
+            where: { name: operator_id },
+          });
         const busData = {
-            bus_operator_id:req.body.bus_operator_id,
+            bus_operator_id:operator.bus_operator_id,
             bus_id:req.body.bus_id,
             name:req.body.name,
             type: req.body.type,
             share:req.body.share,
-            total_amount: req.body.total_amount,
-            share_deducted_amount: req.body.share_deducted_amount
+            // total_amount: req.body.total_amount,
+            // share_deducted_amount: req.body.share_deducted_amount
         };
         const response = await createControllerBus(busData);
         res.status(201).json({response:response});

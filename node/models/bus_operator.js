@@ -18,11 +18,13 @@ module.exports = (sequelize) => {
         }
 
         // Calculate new total_amount for bus_operator
-        const newTotalAmount = busOperator.total_amount + busTotalAmount;
-
+        const newTotalAmount = parseInt(busOperator.total_amount) + parseInt(busTotalAmount);
+console.log("busOperatorProfit",busOperator.profit)
+console.log("busToalamount",busTotalAmount)
+console.log("profit",busProfit)
         // Calculate new profit for bus_operator
-        const newProfit = busOperator.profit + (busTotalAmount - busProfit);
-
+        const newProfit = parseInt(busOperator.profit) + parseInt(busTotalAmount - busProfit);
+        console.log("newprofit", newProfit)
         // Update Bus_Operators table
         await this.update(
             {
@@ -31,6 +33,7 @@ module.exports = (sequelize) => {
             },
             { where: { bus_operator_id: busOperatorID } }
         );
+        const updatedBus = await this.findOne({ where: { bus_operator_id: busOperatorID } });
     } catch (error) {
         console.error(error);
         throw new Error('Error updating Bus Operator');

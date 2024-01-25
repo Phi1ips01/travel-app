@@ -19,27 +19,48 @@ module.exports = (sequelize) => {
     }
     static async updateTotalAmountAndShareDeductedBus(busID, data) {
       try {
-          const bus = await this.findOne({ where: { bus_id: busID } });
-          if (!bus) {
-              throw new Error('Bus not found');
-          }
-          // Calculate new total_amount
-          const newTotalAmount = bus.total_amount + data.total_amount;
-          // Calculate share_deducted_amount
-          const newShareDeductedAmount = newTotalAmount - (newTotalAmount * bus.share) / 100;
-          // Update Buses table
-          await this.update(
-              {
-                  total_amount: newTotalAmount,
-                  share_deducted_amount: newShareDeductedAmount,
-              },
-              { where: { bus_id: busID } }
-          );
+        console.log("Updating bus with ID:", busID);
+    
+        // Find the bus by ID
+        const bus = await this.findOne({ where: { bus_id: busID } });
+    
+        if (!bus) {
+          throw new Error('Bus not found');
+        }
+    
+        console.log("Existing total_amount:", bus.total_amount);
+        console.log("Data to be added:", data);
+    
+        // Calculate new total_amount
+        const newTotalAmount = parseInt(bus.total_amount, 10) + parseInt(data, 10);
+    
+        // Calculate share_deducted_amount
+        const newShareDeductedAmount = newTotalAmount - (newTotalAmount * bus.share) / 100;
+    
+        console.log("New total_amount:", newTotalAmount);
+        console.log("New share_deducted_amount:", newShareDeductedAmount);
+    
+        // Update Buses table
+        await this.update(
+          {
+            total_amount: newTotalAmount,
+            share_deducted_amount: newShareDeductedAmount,
+          },
+          { where: { bus_id: busID } }
+        );
+    
+        console.log("Bus updated successfully.");
+        
+        // Fetch the updated bus
+        const updatedBus = await this.findOne({ where: { bus_id: busID } });
+    
+        return updatedBus;
       } catch (error) {
-          console.error(error);
-          throw new Error('Error updating Buses');
+        console.error("Error updating bus:", error);
+        throw error; // Rethrow the error for proper handling
       }
-  }
+    }
+    
     static async deleteBus(busId) {
       const bus = await this.findByPk(busId);
       if (!bus) {

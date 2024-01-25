@@ -9,17 +9,10 @@ const {
 async function createTripHandler(req,res)
 {
     try{
-        const operator_id = req.body.operator_id
-        const bus_id = req.body.bus_id
-        const operator = await bus_operators.findOne({
-            where: { name: operator_id },
-          });
-          const bus = await buses.findOne({
-            where: { name: bus_id },
-          });
+
         const TripData = {
-            operator_id:operator.operator_id ,
-            bus_id:bus.bus_id,
+            operator_id:req.body.operator_id ,
+            bus_id:req.body.bus_id ,
             trip_id:req.body.trip_id ,
             customer_name:req.body.customer_name ,
             contact:req.body.contact ,
@@ -47,17 +40,11 @@ async function updateTripHandler(req,res)
 {
     try{
         const { id } = req.query;
-        const operator_id = req.body.operator_id
-        const bus_id = req.body.bus_id
-        const operator = await bus_operators.findOne({
-            where: { name: operator_id },
-          });
-          const bus = await buses.findOne({
-            where: { name: bus_id },
-          });
+
+        
         const TripData = {
-            operator_id:operator.operator_id ,
-            bus_id:bus.bus_id,
+            operator_id:req.body.bus_operator_id ,
+            bus_id:req.body.bus_id,
             trip_id:req.body.trip_id ,
             customer_name:req.body.customer_name ,
             contact:req.body.contact ,

@@ -10,12 +10,8 @@ async function createBusHandler(req,res)
 {
     try{
         console.log("handler")
-        const operator_id = req.body.operator_id
-        const operator = await bus_operators.findOne({
-            where: { name: operator_id },
-          });
         const busData = {
-            bus_operator_id:operator.bus_operator_id,
+            bus_operator_id:req.body.bus_operator_id,
             bus_id:req.body.bus_id,
             name:req.body.name,
             type: req.body.type,

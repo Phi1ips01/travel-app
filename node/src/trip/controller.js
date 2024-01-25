@@ -8,11 +8,15 @@ const Bus_Operators = require('../../models/bus_operator')(sequelize)
 async function createControllerTrip(data){
     try{
     const tripResponse = await Trip.createTrip(data)
+    console.log("createcontroleertrip",tripResponse.total_amount)
+    console.log("createcontroleertrip",tripResponse.dataValues.operator_id)
+
     const busResponse = await Buses.updateTotalAmountAndShareDeductedBus(tripResponse.bus_id, tripResponse.total_amount);
+    console.log("controllerrrr",busResponse.dataValues)
     const busOperatorResponse = await Bus_Operators.updateTotalAmountAndProfitBusOperator(
-      tripResponse.bus_operator_id,
-      busResponse.total_amount,
-      busResponse.profit
+      tripResponse.dataValues.operator_id,
+      busResponse.dataValues.total_amount,
+      busResponse.dataValues.share_deducted_amount
       );
       return tripResponse
     }

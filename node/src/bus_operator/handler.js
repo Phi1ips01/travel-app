@@ -27,7 +27,7 @@ async function createBusOperatorHandler(req,res)
 async function updateBusOperatorHandler(req,res)
 {
     try{
-        const { id } = req.query;
+        const { id } = req.body;
         const busOperatorData = {
             bus_operator_id: req.body.bus_operator_id,
             name: req.body.name,
@@ -47,7 +47,8 @@ async function updateBusOperatorHandler(req,res)
 async function destroyBusOperatorHandler(req,res)
 {
     try{
-        const { id } = req.query;
+        console.log(req.body)
+        const { id } = req.body;
         const response = await destroyControllerBusOperator(id);
     res.status(200).json({ response });
   } catch (error) {

@@ -72,7 +72,8 @@ async function updateTripHandler(req,res)
 async function destroyTripHandler(req,res)
 {
     try{
-        const { id } = req.query;
+        console.log("trip handler",req.body)
+        const { id } = req.body;
         const response = await destroyControllerTrip(id);
     res.status(200).json({ response });
   } catch (error) {

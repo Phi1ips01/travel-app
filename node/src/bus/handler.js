@@ -48,10 +48,13 @@ async function updateBusHandler(req,res)
 async function destroyBusHandler(req,res)
 {
     try{
-        const { id } = req.query;
+        console.log("handlerdeleteBUs", req.body)
+
+        const { id } = req.body;
         const response = await destroyControllerBus(id);
     res.status(200).json({ response });
   } catch (error) {
+    console.log(req)
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
     }

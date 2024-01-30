@@ -19,6 +19,7 @@ module.exports = (sequelize) => {
       return trip;
     }
     static async deleteTrip(tripId) {
+      console.log("mode",tripId)
       const trip = await this.findByPk(tripId);
       if (!trip) {
         throw new Error('trip operator not found');

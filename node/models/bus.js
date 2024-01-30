@@ -64,7 +64,7 @@ module.exports = (sequelize) => {
     static async deleteBus(busId) {
       const bus = await this.findByPk(busId);
       if (!bus) {
-        throw new Error('Bus operator not found');
+        throw new Error('Bus not found');
       }
       await bus.destroy();
       return bus

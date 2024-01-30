@@ -19,6 +19,7 @@ module.exports = (sequelize) => {
       return user;
     }
     static async deleteUser(userId) {
+      console.log("user model", userId)
       const user = await this.findByPk(userId);
       if (!user) {
         throw new Error('user not found');

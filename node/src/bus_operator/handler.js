@@ -69,6 +69,7 @@ async function showAllBusOperatorHandler(req,res)
 async function showOneBusOperatorHandler(req,res)
 {
     try{
+        console.log("hi",req.query)
         const { id } = req.query;
         const response = await showOneControllerBusOperator(id);
     res.status(200).json({ response });

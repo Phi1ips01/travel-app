@@ -39,7 +39,7 @@ async function createTripHandler(req,res)
 async function updateTripHandler(req,res)
 {
     try{
-        const { id } = req.query;
+        const { id } = req.body;
 
         
         const TripData = {

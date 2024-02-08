@@ -2,8 +2,9 @@ const {
     createControllerUser,
     updateControllerUser,
     showAllControllerUser,
-    showOneControllerUser,
-    destroyControllerUser
+    showOneByPkControllerUser,
+    destroyControllerUser,
+    loginControllerUser
 } = require('./controller')
 
 async function createUserHandler(req,res)
@@ -24,7 +25,7 @@ async function createUserHandler(req,res)
 async function updateUserHandler(req,res)
 {
     try{
-        const { id } = req.query;
+        const { id } = req.body;
         const UserData = {
             username:req.body.username ,
             email:req.body.email ,
@@ -60,23 +61,48 @@ async function showAllUserHandler(req,res)
     res.status(500).json({ error: 'Internal Server Error' });
     }
 }
-async function showOneUserHandler(req,res)
+async function showOneByPkUserHandler(req,res)
 {
     try{
         const { id } = req.query;
-        const response = await showOneControllerUser(id);
+        const response = await showOneByPkControllerUser(id);
     res.status(200).json({ response });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
     }
 }
+
+async function loginUserHandler(req, res) {
+    try {
+        const userData = {
+            email: req.body.email,
+            password: req.body.password,
+            role: req.body.role
+        };
+        
+        const response = await loginControllerUser(userData);
+        console.log("resposne",response)
+        if (response.success) {
+            res.status(200).json({ message: 'Login successful', user: response.user,token:response.token,payload:response.payload });
+        } else {
+            res.status(401).json({ error: response.message });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+
 module.exports={
     createUserHandler,
     updateUserHandler,
     destroyUserHandler,
-    showOneUserHandler,
-    showAllUserHandler
+    showOneByPkUserHandler,
+    showAllUserHandler,
+    loginUserHandler,
+    
 
 
 }

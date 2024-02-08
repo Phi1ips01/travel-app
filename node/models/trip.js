@@ -18,6 +18,10 @@ module.exports = (sequelize) => {
       await trip.update(data);
       return trip;
     }
+    // static async updateTotalAmountTrip(tripId,data){
+      
+    // }
+      
     static async deleteTrip(tripId) {
       console.log("mode",tripId)
       const trip = await this.findByPk(tripId);

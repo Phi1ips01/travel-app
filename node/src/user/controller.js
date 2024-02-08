@@ -1,4 +1,6 @@
 const Sequelize = require('sequelize');
+const passport = require('passport');
+const jwt = require('jsonwebtoken')
 const { sequelize } = require('../../models');
 const User = require('../../models/users')(sequelize)
 
@@ -31,9 +33,9 @@ async function updateControllerUser(UserId, data) {
       throw new Error('Error deleting User');
     }
   }
-  async function showOneControllerUser(UserId) {
+  async function showOneByPkControllerUser(UserId) {
     try {
-      const response = await User.showOneUser(UserId);
+      const response = await User.showOneByPkUser(UserId);
       return response;
     } catch (error) {
       console.error(error);
@@ -49,10 +51,57 @@ async function updateControllerUser(UserId, data) {
       throw new Error('Error deleting User');
     }
   }
+
+  
+  async function loginControllerUser(userData) {
+      try {
+          const user = await User.showOneByUser("email", userData.email);
+          if (!user) {
+              return {
+                  success: false,
+                  message: "Could not find the user"
+              };
+          }
+  
+          if (userData.password !== user.password) {
+              return {
+                  success: false,
+                  message: "Incorrect password"
+              };
+          }
+  
+          const payload = {
+              username: user.username,
+              id: user.id,
+              role: user.role
+          };
+  
+          const token = jwt.sign(payload, "K3fcvhg42lmm3o4?nf3", { expiresIn: "1d" });
+  
+          return {
+              success: true,
+              message: "Login successful",
+              token: "Bearer " + token,
+              payload:payload
+          };
+      } catch (error) {
+          console.error(error);
+          return {
+              success: false,
+              message: "Internal Server Error"
+          };
+      }
+  }
+  
+  module.exports = loginControllerUser;
+  
+  
+
 module.exports={
     createControllerUser,
     updateControllerUser,
     destroyControllerUser,
     showAllControllerUser,
-    showOneControllerUser
+    showOneByPkControllerUser,
+    loginControllerUser,
 }

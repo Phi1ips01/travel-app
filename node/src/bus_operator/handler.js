@@ -27,6 +27,7 @@ async function createBusOperatorHandler(req,res)
 async function updateBusOperatorHandler(req,res)
 {
     try{
+        console.log("update",req.body)
         const { id } = req.body;
         const busOperatorData = {
             bus_operator_id: req.body.bus_operator_id,

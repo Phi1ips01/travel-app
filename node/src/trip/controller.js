@@ -29,6 +29,7 @@ async function createControllerTrip(data){
 async function updateControllerTrip(TripId, data) {
     try {
       const response = await Trip.updateTrip(TripId, data);
+      console.log("update data",data)
       return response;
     } catch (error) {
         console.error(error);

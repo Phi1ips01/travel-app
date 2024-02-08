@@ -1,5 +1,7 @@
 
 const express = require('express');
+const session = require('express-session');
+const passport = require('passport');
 const app = express();
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -11,8 +13,18 @@ const user = require('../src/user/router')
 
 const port = 3000 ;
 
+require('./passport');
+
 app.use(bodyParser.json())
 app.use(cors())
+
+app.use(session({
+  secret: 'your_secret_key',
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/bus', busRouter);
 app.use('/busOperator',busOperator)

@@ -28,7 +28,8 @@ async function createBusHandler(req,res)
 async function updateBusHandler(req,res)
 {
     try{
-        const { id } = req.query;
+        console.log("req,bdy",req.body)
+        const { id } = req.body;
         const busData = {
             bus_operator_id:req.body.bus_operator_id,
             bus_id:req.body.bus_id,

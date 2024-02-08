@@ -27,8 +27,13 @@ module.exports = (sequelize) => {
       await user.destroy();
       return user
     }
-    static async showOneUser(userId) {
+    static async showOneByPkUser(userId) {
       return await this.findByPk(userId);
+    }
+    static async showOneByUser(attributeName,attributeValue){
+      const whereClause ={}
+      whereClause[attributeName]=attributeValue
+      return this.findOne({where:whereClause})
     }
     static async showAllUser() {
       return await this.findAll();

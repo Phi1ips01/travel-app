@@ -1,4 +1,5 @@
 const express = require('express')
+const authenticateToken = require('../../middleware/authenticate')
 const router = express.Router()
 const {
   createBusOperatorHandler,
@@ -7,6 +8,8 @@ const {
   showAllBusOperatorHandler,
   showOneBusOperatorHandler
 } = require('./handler')
+
+router.use(authenticateToken)
 
 router.post("/add", createBusOperatorHandler);
 router.get("/showAll", showAllBusOperatorHandler );

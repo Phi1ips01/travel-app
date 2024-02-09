@@ -19,7 +19,7 @@ app.use(bodyParser.json())
 app.use(cors())
 
 app.use(session({
-  secret: 'your_secret_key',
+  secret: 'secret_key',
   resave: false,
   saveUninitialized: false
 }));

@@ -10,7 +10,7 @@ async function createBusOperatorHandler(req,res)
 {
     try{
         const busOperatorData = {
-            bus_operator_id: req.body.bus_operator_id,
+            // bus_operator_id: 201,
             name: req.body.name,
             contact: req.body.contact,
             // total_amount: req.body.total_amount,
@@ -30,7 +30,7 @@ async function updateBusOperatorHandler(req,res)
         console.log("update",req.body)
         const { id } = req.body;
         const busOperatorData = {
-            bus_operator_id: req.body.bus_operator_id,
+            // bus_operator_id: 202,
             name: req.body.name,
             contact: req.body.contact,
             // total_amount: req.body.total_amount,

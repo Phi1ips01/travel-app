@@ -9,7 +9,7 @@ const {
 async function createTripHandler(req,res)
 {
     try{
-
+        console.log("req.body",req.body)
         const TripData = {
             operator_id:req.body.operator_id ,
             bus_id:req.body.bus_id ,
@@ -26,6 +26,7 @@ async function createTripHandler(req,res)
             age: req.body.age,
             number_of_tickets:req.body.number_of_tickets ,
             total_amount: req.body.total_amount,
+            payment_status: req.body.payment_status,
             paid: req.body.paid,
             remarks: req.body.remarks,
             agents: req.body.agents,
@@ -58,6 +59,7 @@ async function updateTripHandler(req,res)
             age: req.body.age,
             number_of_tickets:req.body.number_of_tickets ,
             total_amount: req.body.total_amount,
+            payment_status: req.body.payment_status,
             paid: req.body.paid,
             remarks: req.body.remarks,
             agents: req.body.agents,

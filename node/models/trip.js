@@ -59,6 +59,7 @@ module.exports = (sequelize) => {
     number_of_tickets: DataTypes.INTEGER,
     total_amount: DataTypes.INTEGER,
     paid: DataTypes.INTEGER,
+    payment_status: DataTypes.STRING,
     remarks: DataTypes.STRING,
     agents: DataTypes.STRING,
   }, {

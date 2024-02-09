@@ -22,7 +22,7 @@ module.exports = (sequelize) => {
         console.log("Updating bus with ID:", busID);
     
         // Find the bus by ID
-        const bus = await this.findOne({ where: { bus_id: busID } });
+        const bus = await this.findOne({ where: { id: busID } });
     
         if (!bus) {
           throw new Error('Bus not found');
@@ -46,13 +46,13 @@ module.exports = (sequelize) => {
             total_amount: newTotalAmount,
             share_deducted_amount: newShareDeductedAmount,
           },
-          { where: { bus_id: busID } }
+          { where: { id: busID } }
         );
     
         console.log("Bus updated successfully.");
         
         // Fetch the updated bus
-        const updatedBus = await this.findOne({ where: { bus_id: busID } });
+        const updatedBus = await this.findOne({ where: { id: busID } });
     
         return updatedBus;
       } catch (error) {
@@ -87,7 +87,6 @@ module.exports = (sequelize) => {
   }
   Bus.init({
     bus_operator_id: DataTypes.INTEGER,
-    bus_id: DataTypes.INTEGER,
     name: DataTypes.STRING,
     type: DataTypes.STRING,
     share: DataTypes.INTEGER,

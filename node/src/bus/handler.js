@@ -12,7 +12,7 @@ async function createBusHandler(req,res)
         console.log("handler")
         const busData = {
             bus_operator_id:req.body.bus_operator_id,
-            bus_id:req.body.bus_id,
+            // bus_id:req.body.bus_operator_id,
             name:req.body.name,
             type: req.body.type,
             share:req.body.share,
@@ -32,7 +32,7 @@ async function updateBusHandler(req,res)
         const { id } = req.body;
         const busData = {
             bus_operator_id:req.body.bus_operator_id,
-            bus_id:req.body.bus_id,
+            // bus_id:req.body.bus_operator_id,
             name:req.body.name,
             type: req.body.type,
             share:req.body.share,

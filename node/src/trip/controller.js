@@ -28,7 +28,13 @@ async function createControllerTrip(data){
 }
 async function updateControllerTrip(TripId, data) {
     try {
+      const oldResponse = await Trip.showOneTrip(TripId)
       const response = await Trip.updateTrip(TripId, data);
+      // if(oldResponse.total_amount !==response.total_amount)
+      // {
+      //   const busResponse = await Buses.changeUpdateTotalAmountAndShareDeductedBus(response.bus_id,response.total_amount)
+      //   const busOperatorResponse = await Bus_Operators.changeUpdateTotalAmountAndProfitBusOperator(response.dataValues.)
+      // }
       console.log("update data",data)
       return response;
     } catch (error) {

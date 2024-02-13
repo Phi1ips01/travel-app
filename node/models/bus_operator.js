@@ -39,6 +39,56 @@ console.log("profit",busProfit)
         throw new Error('Error updating Bus Operator');
     }
 }
+static async updateTotalAmountAndProfitBusOperatorOnUpdate(busOperatorID, newBusTotalAmount, newBusProfit, oldBusTotalAmount, oldBusProfit) {
+  try {
+    console.log("Updating bus operator with ID:", busOperatorID);
+
+    // Find the bus operator by ID
+    const busOperator = await this.findOne({ where: { id: busOperatorID } });
+
+    if (!busOperator) {
+      throw new Error('Bus Operator not found');
+    }
+
+    console.log("Existing total_amount:", busOperator.total_amount);
+    console.log("Existing profit:", busOperator.profit);
+    console.log("New bus total amount:", newBusTotalAmount);
+    console.log("New bus profit:", newBusProfit);
+
+    // Calculate the changes in total amount and profit
+    const totalAmountChange = parseInt(newBusTotalAmount, 10) - parseInt(oldBusTotalAmount, 10);
+    const profitChange = parseInt(newBusProfit, 10) - parseInt(oldBusProfit, 10);
+
+    // Calculate new total_amount for bus operator
+    const newTotalAmount = parseInt(busOperator.total_amount) + totalAmountChange;
+
+    // Calculate new profit for bus operator
+    const newProfit = parseInt(busOperator.profit) + profitChange;
+
+    console.log("New total_amount for bus operator:", newTotalAmount);
+    console.log("New profit for bus operator:", newProfit);
+
+    // Update Bus_Operators table
+    await this.update(
+      {
+        total_amount: newTotalAmount,
+        profit: newProfit,
+      },
+      { where: { id: busOperatorID } }
+    );
+
+    console.log("Bus operator updated successfully.");
+
+    // Fetch the updated bus operator
+    const updatedBusOperator = await this.findOne({ where: { id: busOperatorID } });
+
+    return updatedBusOperator;
+  } catch (error) {
+    console.error("Error updating bus operator:", error);
+    throw new Error('Error updating Bus Operator');
+  }
+}
+
 
     static async updateBusOperator(busOperatorId, data) {
       const busOperator = await this.findByPk(busOperatorId);
@@ -62,8 +112,11 @@ console.log("profit",busProfit)
       return await this.findByPk(busOperatorId);
     }
     static async showAllBusOperator() {
-      return await this.findAll();
+      return await this.findAll({
+        order: [['id', 'DESC']] // Replace 'columnName' with the actual column name you want to sort by
+      });
     }
+    
     static associate(models) {
       // define association here
     }

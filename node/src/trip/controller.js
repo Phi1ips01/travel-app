@@ -26,22 +26,42 @@ async function createControllerTrip(data){
       throw new Error('Error updating Trip')
     }
 }
-async function updateControllerTrip(TripId, data) {
-    try {
-      const oldResponse = await Trip.showOneTrip(TripId)
-      const response = await Trip.updateTrip(TripId, data);
-      // if(oldResponse.total_amount !==response.total_amount)
-      // {
-      //   const busResponse = await Buses.changeUpdateTotalAmountAndShareDeductedBus(response.bus_id,response.total_amount)
-      //   const busOperatorResponse = await Bus_Operators.changeUpdateTotalAmountAndProfitBusOperator(response.dataValues.)
-      // }
-      console.log("update data",data)
-      return response;
-    } catch (error) {
-        console.error(error);
-        throw new Error('Error updating Trip');
-    }
+async function updateControllerTrip(TripId, newData) {
+  try {
+    // Retrieve the old trip data
+    const oldTrip = await Trip.showOneTrip(TripId);
+
+    // Update the trip with the new data
+    const updatedTrip = await Trip.updateTrip(TripId, newData);
+
+    // Calculate changes in trip data
+    const totalAmountChange = updatedTrip.total_amount - oldTrip.total_amount;
+    const operatorId = updatedTrip.operator_id;
+
+    // Update the associated bus
+    const updatedBus = await Buses.updateTotalAmountAndShareDeductedBusOnUpdate(
+      updatedTrip.bus_id,
+      updatedTrip.total_amount,
+      oldTrip.total_amount
+    );
+
+    // Update the associated bus operator
+    const updatedBusOperator = await Bus_Operators.updateTotalAmountAndProfitBusOperatorOnUpdate(
+      operatorId,
+      updatedBus.total_amount,
+      updatedBus.share_deducted_amount,
+      oldTrip.total_amount,
+      oldTrip.share_deducted_amount
+    );
+
+    console.log("Trip updated successfully.");
+    return updatedTrip;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error updating Trip');
   }
+}
+
   async function destroyControllerTrip(TripId) {
     try {
       const response = await Trip.deleteTrip(TripId);
@@ -60,9 +80,18 @@ async function updateControllerTrip(TripId, data) {
       throw new Error('Error fetching data from Trip');
     }
   }
-  async function showAllControllerTrip() {
+  async function showAllControllerTrip(pageAsNumber,sizeAsNumber) {
     try {
-      const response = await Trip.showAllTrip();
+      let page = 0;
+      if (!Number.isNaN(pageAsNumber) && pageAsNumber > 0) {
+        page = pageAsNumber;
+      }
+
+      let size = 20;
+      if (!Number.isNaN(sizeAsNumber) && !(sizeAsNumber > 20) && !(sizeAsNumber < 1)) {
+        size = sizeAsNumber;
+      }
+      const response = await Trip.showAllTrip(page,size);
       return response;
     } catch (error) {
       console.error(error);

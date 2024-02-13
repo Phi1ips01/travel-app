@@ -60,6 +60,54 @@ module.exports = (sequelize) => {
         throw error; // Rethrow the error for proper handling
       }
     }
+    static async updateTotalAmountAndShareDeductedBusOnUpdate(busID, newData, oldData) {
+      try {
+        console.log("Updating bus with ID:", busID);
+    
+        // Find the bus by ID
+        const bus = await this.findOne({ where: { id: busID } });
+    
+        if (!bus) {
+          throw new Error('Bus not found');
+        }
+    
+        console.log("Existing total_amount:", bus.total_amount);
+        console.log("Data before update:", oldData);
+        console.log("Data after update:", newData);
+    
+        // Calculate the change in data
+        const dataChange = parseInt(newData, 10) - parseInt(oldData, 10);
+    
+        // Calculate new total_amount
+        const newTotalAmount = parseInt(bus.total_amount, 10) + dataChange;
+    
+        // Calculate share_deducted_amount
+        const newShareDeductedAmount = newTotalAmount - (newTotalAmount * bus.share) / 100;
+    
+        console.log("New total_amount:", newTotalAmount);
+        console.log("New share_deducted_amount:", newShareDeductedAmount);
+    
+        // Update Buses table
+        await this.update(
+          {
+            total_amount: newTotalAmount,
+            share_deducted_amount: newShareDeductedAmount,
+          },
+          { where: { id: busID } }
+        );
+    
+        console.log("Bus updated successfully.");
+    
+        // Fetch the updated bus
+        const updatedBus = await this.findOne({ where: { id: busID } });
+    
+        return updatedBus;
+      } catch (error) {
+        console.error("Error updating bus:", error);
+        throw error; // Rethrow the error for proper handling
+      }
+    }
+    
     
     static async deleteBus(busId) {
       const bus = await this.findByPk(busId);
@@ -73,7 +121,9 @@ module.exports = (sequelize) => {
       return await this.findByPk(busId);
     }
     static async showAllBus() {
-      return await this.findAll();
+      return await this.findAll({
+        order: [['id', 'DESC']] // Replace 'columnName' with the actual column name you want to sort by
+      });
     }
   
     /**

@@ -34,13 +34,28 @@ module.exports = (sequelize) => {
     static async showOneTrip(tripId) {
       return await this.findByPk(tripId);
     }
-    static async showAllTrip() {
-      return await this.findAll();
+    static async showAllTrip(page, size) {
+      const offset = page * size; // Calculate the offset for pagination
+    
+      try {
+        const result = await this.findAndCountAll({
+          limit: size,
+          offset: offset,
+          order: [['id', 'DESC']] // Replace 'columnName' with the actual column name you want to sort by
+        });
+    
+        return result;
+      } catch (error) {
+        // Handle errors appropriately
+        console.error('Error fetching data:', error);
+        throw error; // Rethrow the error to be handled by the caller
+      }
     }
+    
   
     static associate(models) {
       // define association here
-    }
+    } 
   }
   Trip.init({
     operator_id: DataTypes.INTEGER,

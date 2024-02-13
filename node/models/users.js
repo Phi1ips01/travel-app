@@ -36,7 +36,9 @@ module.exports = (sequelize) => {
       return this.findOne({where:whereClause})
     }
     static async showAllUser() {
-      return await this.findAll();
+      return await this.findAll({
+        order: [['id', 'DESC']] // Replace 'columnName' with the actual column name you want to sort by
+      });
     }
     /**
     

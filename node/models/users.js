@@ -35,10 +35,22 @@ module.exports = (sequelize) => {
       whereClause[attributeName]=attributeValue
       return this.findOne({where:whereClause})
     }
-    static async showAllUser() {
-      return await this.findAll({
-        order: [['id', 'DESC']] // Replace 'columnName' with the actual column name you want to sort by
-      });
+    static async showAllUser(page, size) {
+      const offset = page * size; // Calculate the offset for pagination
+    
+      try {
+        const result = await this.findAndCountAll({
+          limit: size,
+          offset: offset,
+          order: [['id', 'DESC']] // Replace 'columnName' with the actual column name you want to sort by
+        });
+    
+        return result;
+      } catch (error) {
+        // Handle errors appropriately
+        console.error('Error fetching data:', error);
+        throw error; // Rethrow the error to be handled by the caller
+      }
     }
     /**
     

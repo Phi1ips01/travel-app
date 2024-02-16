@@ -40,15 +40,25 @@ async function updateControllerBusOperator(BusOperatorId, data) {
       throw new Error('Error fetching data from Bus Operator');
     }
   }
-  async function showAllControllerBusOperator() {
+  async function showAllControllerBusOperator(pageAsNumber,sizeAsNumber) {
     try {
-      const response = await BusOperator.showAllBusOperator();
+      let page = 1;
+      if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
+        page = pageAsNumber;
+      }
+
+      let size = 20;
+      if (!Number.isNaN(sizeAsNumber) && !(sizeAsNumber > 20) && !(sizeAsNumber < 1)) {
+        size = sizeAsNumber;
+      }
+      const response = await BusOperator.showAllBusOperator(page-1,size);
       return response;
     } catch (error) {
       console.error(error);
-      throw new Error('Error deleting Bus Operator');
+      throw new Error('Error deleting BusOperator');
     }
   }
+  
 module.exports={
     createControllerBusOperator,
     updateControllerBusOperator,

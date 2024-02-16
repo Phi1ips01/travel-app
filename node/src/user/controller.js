@@ -42,16 +42,25 @@ async function updateControllerUser(UserId, data) {
       throw new Error('Error fetching data from User');
     }
   }
-  async function showAllControllerUser() {
+  async function showAllControllerUser(pageAsNumber,sizeAsNumber) {
     try {
-      const response = await User.showAllUser();
+      let page = 1;
+      if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
+        page = pageAsNumber;
+      }
+
+      let size = 20;
+      if (!Number.isNaN(sizeAsNumber) && !(sizeAsNumber > 20) && !(sizeAsNumber < 1)) {
+        size = sizeAsNumber;
+      }
+      console.log("contorler",page,size)
+      const response = await User.showAllUser(page-1,size);
       return response;
     } catch (error) {
       console.error(error);
       throw new Error('Error deleting User');
     }
   }
-
   
   async function loginControllerUser(userData) {
       try {

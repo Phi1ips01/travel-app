@@ -41,15 +41,25 @@ async function updateControllerBus(busId, data) {
       throw new Error('Error fetching data from bus');
     }
   }
-  async function showAllControllerBus() {
+  async function showAllControllerBus(pageAsNumber,sizeAsNumber) {
     try {
-      const response = await Bus.showAllBus();
+      let page = 1;
+      if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
+        page = pageAsNumber;
+      }
+
+      let size = 20;
+      if (!Number.isNaN(sizeAsNumber) && !(sizeAsNumber > 20) && !(sizeAsNumber < 1)) {
+        size = sizeAsNumber;
+      }
+      const response = await Bus.showAllBus(page-1,size);
       return response;
     } catch (error) {
       console.error(error);
-      throw new Error('Error deleting bus');
+      throw new Error('Error deleting Bus');
     }
   }
+  
 module.exports={
     createControllerBus,
     updateControllerBus,

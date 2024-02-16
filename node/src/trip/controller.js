@@ -82,8 +82,8 @@ async function updateControllerTrip(TripId, newData) {
   }
   async function showAllControllerTrip(pageAsNumber,sizeAsNumber) {
     try {
-      let page = 0;
-      if (!Number.isNaN(pageAsNumber) && pageAsNumber > 0) {
+      let page = 1;
+      if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
         page = pageAsNumber;
       }
 
@@ -91,7 +91,7 @@ async function updateControllerTrip(TripId, newData) {
       if (!Number.isNaN(sizeAsNumber) && !(sizeAsNumber > 20) && !(sizeAsNumber < 1)) {
         size = sizeAsNumber;
       }
-      const response = await Trip.showAllTrip(page,size);
+      const response = await Trip.showAllTrip(page-1,size);
       return response;
     } catch (error) {
       console.error(error);

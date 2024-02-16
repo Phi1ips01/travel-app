@@ -54,7 +54,10 @@ async function destroyUserHandler(req,res)
 async function showAllUserHandler(req,res)
 {
     try{
-        const response = await showAllControllerUser();
+        const pageAsNumber = Number.parseInt(req.query.page);
+        const sizeAsNumber = Number.parseInt(req.query.size);
+        console.log("agea",pageAsNumber,sizeAsNumber)
+        const response = await showAllControllerUser(pageAsNumber,sizeAsNumber);
     res.status(200).json({ response });
   } catch (error) {
     console.error(error);

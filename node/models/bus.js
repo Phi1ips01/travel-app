@@ -120,10 +120,22 @@ module.exports = (sequelize) => {
     static async showOneBus(busId) {
       return await this.findByPk(busId);
     }
-    static async showAllBus() {
-      return await this.findAll({
-        order: [['id', 'DESC']] // Replace 'columnName' with the actual column name you want to sort by
-      });
+    static async showAllBus(page, size) {
+      const offset = page * size; // Calculate the offset for pagination
+    
+      try {
+        const result = await this.findAndCountAll({
+          limit: size,
+          offset: offset,
+          order: [['id', 'DESC']] // Replace 'columnName' with the actual column name you want to sort by
+        });
+    
+        return result;
+      } catch (error) {
+        // Handle errors appropriately
+        console.error('Error fetching data:', error);
+        throw error; // Rethrow the error to be handled by the caller
+      }
     }
   
     /**

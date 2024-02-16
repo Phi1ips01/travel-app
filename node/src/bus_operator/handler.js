@@ -60,7 +60,10 @@ async function destroyBusOperatorHandler(req,res)
 async function showAllBusOperatorHandler(req,res)
 {
     try{
-        const response = await showAllControllerBusOperator();
+        const pageAsNumber = Number.parseInt(req.query.page);
+        const sizeAsNumber = Number.parseInt(req.query.size);
+        console.log("agea",pageAsNumber,sizeAsNumber)
+        const response = await showAllControllerBusOperator(pageAsNumber,sizeAsNumber);
     res.status(200).json({ response });
   } catch (error) {
     console.error(error);

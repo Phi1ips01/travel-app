@@ -15,7 +15,14 @@ async function createControllerBusOperator(data){
 }
 async function updateControllerBusOperator(BusOperatorId, data) {
     try {
-      const response = await BusOperator.updateBusOperator(BusOperatorId, data);
+      const busOperator = await BusOperator.showOneBusOperator(BusOperatorId);
+    if (!busOperator) {
+      throw new Error('Bus operator not found');
+    }
+    const totalAmount = busOperator.total_amount;
+    const remainingPayment = totalAmount - data.paid;
+    const newData = { ...data, remaining_payment: remainingPayment };
+      const response = await BusOperator.updateBusOperator(BusOperatorId, newData);
       return response;
     } catch (error) {
         console.error(error);
@@ -41,7 +48,10 @@ async function updateControllerBusOperator(BusOperatorId, data) {
     }
   }
   async function showAllControllerBusOperator(pageAsNumber,sizeAsNumber) {
-    try {
+    console.log("controller1",pageAsNumber,sizeAsNumber)
+    if(pageAsNumber || sizeAsNumber)
+    {
+      try {
       let page = 1;
       if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
         page = pageAsNumber;
@@ -51,12 +61,19 @@ async function updateControllerBusOperator(BusOperatorId, data) {
       if (!Number.isNaN(sizeAsNumber) && !(sizeAsNumber > 20) && !(sizeAsNumber < 1)) {
         size = sizeAsNumber;
       }
+      console.log("controller",page,size)
       const response = await BusOperator.showAllBusOperator(page-1,size);
       return response;
     } catch (error) {
       console.error(error);
       throw new Error('Error deleting BusOperator');
     }
+  }
+  else
+  {
+    const response = await BusOperator.showAllBusOperator()
+    return response;
+  }
   }
   
 module.exports={

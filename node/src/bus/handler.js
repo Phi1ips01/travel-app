@@ -62,6 +62,8 @@ async function destroyBusHandler(req,res)
 }
 async function showAllBusHandler(req,res)
 {
+    if(req.query.page && req.query.size)
+    {
     try{
         const pageAsNumber = Number.parseInt(req.query.page);
         const sizeAsNumber = Number.parseInt(req.query.size);
@@ -72,6 +74,11 @@ async function showAllBusHandler(req,res)
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
     }
+}
+else{
+    const response = await showAllControllerBus()
+    res.status(200).json({response})
+}
 }
 async function showOneBusHandler(req,res)
 {

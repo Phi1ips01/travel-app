@@ -42,6 +42,8 @@ async function updateControllerBus(busId, data) {
     }
   }
   async function showAllControllerBus(pageAsNumber,sizeAsNumber) {
+    if(pageAsNumber || sizeAsNumber)
+    {
     try {
       let page = 1;
       if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
@@ -58,6 +60,12 @@ async function updateControllerBus(busId, data) {
       console.error(error);
       throw new Error('Error deleting Bus');
     }
+  }
+  else
+  {
+    const response = await Bus.showAllBus()
+    return response;
+  }
   }
   
 module.exports={

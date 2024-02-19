@@ -81,6 +81,8 @@ async function updateControllerTrip(TripId, newData) {
     }
   }
   async function showAllControllerTrip(pageAsNumber,sizeAsNumber) {
+    if(pageAsNumber || sizeAsNumber)
+    {
     try {
       let page = 1;
       if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
@@ -97,6 +99,12 @@ async function updateControllerTrip(TripId, newData) {
       console.error(error);
       throw new Error('Error deleting Trip');
     }
+  }
+  else
+  {
+    const response = await Trip.showAllTrip()
+    return response;
+  }
   }
 module.exports={
     createControllerTrip,

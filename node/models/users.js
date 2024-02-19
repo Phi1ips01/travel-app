@@ -36,6 +36,7 @@ module.exports = (sequelize) => {
       return this.findOne({where:whereClause})
     }
     static async showAllUser(page, size) {
+      if (page || size) {
       const offset = page * size; // Calculate the offset for pagination
     
       try {
@@ -51,6 +52,12 @@ module.exports = (sequelize) => {
         console.error('Error fetching data:', error);
         throw error; // Rethrow the error to be handled by the caller
       }
+    } else {
+      const result = await this.findAll({
+        order: [['id', 'DESC']] // Order by id in ascending order
+      });
+      return result;
+    }
     }
     /**
     

@@ -85,6 +85,8 @@ async function destroyTripHandler(req,res)
 }
 async function showAllTripHandler(req,res)
 {
+    if(req.query.page && req.query.size)
+    {
     try{
         const pageAsNumber = Number.parseInt(req.query.page);
         const sizeAsNumber = Number.parseInt(req.query.size);
@@ -95,6 +97,11 @@ async function showAllTripHandler(req,res)
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
     }
+}
+else{
+    const response = await showAllControllerTrip()
+    res.status(200).json({response})
+}
 }
 async function showOneTripHandler(req,res)
 {

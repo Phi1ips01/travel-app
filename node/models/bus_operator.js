@@ -112,22 +112,30 @@ static async updateTotalAmountAndProfitBusOperatorOnUpdate(busOperatorID, newBus
       return await this.findByPk(busOperatorId);
     }
     static async showAllBusOperator(page, size) {
-      const offset = page * size; // Calculate the offset for pagination
+      if (page || size) {
+        const offset = page * size; // Calculate the offset for pagination
     
-      try {
-        const result = await this.findAndCountAll({
-          limit: size,
-          offset: offset,
-          order: [['id', 'DESC']] // Replace 'columnName' with the actual column name you want to sort by
+        try {
+          const result = await this.findAndCountAll({
+            limit: size,
+            offset: offset,
+            order: [['id', 'DESC']] // Order by id in descending order
+          });
+    
+          return result;
+        } catch (error) {
+          // Handle errors appropriately
+          console.error('Error fetching data:', error);
+          throw error; // Rethrow the error to be handled by the caller
+        }
+      } else {
+        const result = await this.findAll({
+          order: [['id', 'DESC']] // Order by id in ascending order
         });
-    
         return result;
-      } catch (error) {
-        // Handle errors appropriately
-        console.error('Error fetching data:', error);
-        throw error; // Rethrow the error to be handled by the caller
       }
     }
+    
     
     static associate(models) {
       // define association here

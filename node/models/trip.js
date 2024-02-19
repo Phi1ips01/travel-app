@@ -1,7 +1,10 @@
 'use strict';
+
 const {
   Model,DataTypes
 } = require('sequelize');
+const Bus = require('./bus');
+const Bus_operator = require('./bus_operator');
 module.exports = (sequelize) => {
   class Trip extends Model {
     static async createTrip(data) {
@@ -35,13 +38,18 @@ module.exports = (sequelize) => {
       return await this.findByPk(tripId);
     }
     static async showAllTrip(page, size) {
+      if (page || size) {
       const offset = page * size; // Calculate the offset for pagination
     
       try {
         const result = await this.findAndCountAll({
           limit: size,
           offset: offset,
-          order: [['id', 'DESC']] // Replace 'columnName' with the actual column name you want to sort by
+          order: [['id', 'DESC']], // Replace 'columnName' with the actual column name you want to sort by
+          // include: [
+          //   { model: Bus, as: 'bus', attributes: ['id', 'name'] }, // Include the bus name
+          //   { model: Bus_operator, as: 'bus_operator', attributes: ['id', 'name'] }, // Include the bus operator name
+          // ],
         });
     
         return result;
@@ -50,10 +58,20 @@ module.exports = (sequelize) => {
         console.error('Error fetching data:', error);
         throw error; // Rethrow the error to be handled by the caller
       }
+    } else {
+      const result = await this.findAll({
+        order: [['id', 'DESC']] // Order by id in ascending order
+      });
+      return result;
+    }
     }
     
   
     static associate(models) {
+      // console.log("Models",Model)
+      // console.log("models",models)
+      // this.belongsTo(models.Bus, { foreignKey: 'bus_id', as: 'buses' });
+      // this.belongsTo(models.Bus_operator, { foreignKey: 'operator_id', as: 'bus_operators' });
       // define association here
     } 
   }

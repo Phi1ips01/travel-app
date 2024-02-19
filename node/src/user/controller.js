@@ -43,6 +43,8 @@ async function updateControllerUser(UserId, data) {
     }
   }
   async function showAllControllerUser(pageAsNumber,sizeAsNumber) {
+    if(pageAsNumber || sizeAsNumber)
+    {
     try {
       let page = 1;
       if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
@@ -60,6 +62,12 @@ async function updateControllerUser(UserId, data) {
       console.error(error);
       throw new Error('Error deleting User');
     }
+  }
+  else
+  {
+    const response = await User.showAllUser()
+    return response;
+  }
   }
   
   async function loginControllerUser(userData) {

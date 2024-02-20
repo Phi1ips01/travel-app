@@ -2,6 +2,9 @@ const {
   Model,DataTypes
 } = require('sequelize');
 module.exports = (sequelize) => {
+  const Bus_operators = require('./bus_operator');
+  const Trips = require('./trip')
+
   class Bus extends Model {
     static async createBus(data) {
       const busCreate = await this.create(data);
@@ -151,6 +154,8 @@ module.exports = (sequelize) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      this.hasMany(models.Trip, { foreignKey: 'bus_id', as: 'trips' });
+
       // define association here
     }
   }

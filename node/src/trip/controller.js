@@ -94,6 +94,20 @@ async function updateControllerTrip(TripId, newData) {
         size = sizeAsNumber;
       }
       const response = await Trip.showAllTrip(page-1,size);
+      const busData = await Buses.showAllBus(page-1,size);
+      const busOperatorData = await Bus_Operators.showAllBusOperator(page-1,size);
+      console.log('busData',busData);
+      console.log('busOperatorData',busOperatorData);
+      console.log('response',response);
+      const updatedResponse = response.map(tripData=>{
+        const busName =busData.find(bus=>bus.id==tripData.id);
+        const busoperatorname =busOperatorData.find(busoperator=>busoperator.id===tripData.busOperatorId);
+        return{
+          ...tripData,
+          busName,
+          busoperatorname
+        }
+      })
       return response;
     } catch (error) {
       console.error(error);

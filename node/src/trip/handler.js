@@ -92,6 +92,7 @@ async function showAllTripHandler(req,res)
         const sizeAsNumber = Number.parseInt(req.query.size);
         console.log("agea",pageAsNumber,sizeAsNumber)
         const response = await showAllControllerTrip(pageAsNumber,sizeAsNumber);
+        console.log("response handler",response)
     res.status(200).json({ response });
   } catch (error) {
     console.error(error);

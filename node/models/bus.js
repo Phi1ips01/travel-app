@@ -154,7 +154,7 @@ module.exports = (sequelize) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasMany(models.Trip, { foreignKey: 'bus_id', as: 'trips' });
+      // this.hasMany(models.Trip, { foreignKey: 'bus_id', as: 'trips' });
 
       // define association here
     }

@@ -138,7 +138,7 @@ static async updateTotalAmountAndProfitBusOperatorOnUpdate(busOperatorID, newBus
     
     
     static associate(models) {
-      Bus_operator.hasMany(models.Trip, { foreignKey: 'operator_id', as: 'trips' });
+      // Bus_operator.hasMany(models.Trip, { foreignKey: 'operator_id', as: 'trips' });
 
       // define association here
     }

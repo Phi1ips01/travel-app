@@ -83,41 +83,60 @@ async function updateControllerTrip(TripId, newData) {
   async function showAllControllerTrip(pageAsNumber,sizeAsNumber) {
     if(pageAsNumber || sizeAsNumber)
     {
-    try {
-      let page = 1;
-      if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
-        page = pageAsNumber;
-      }
-
-      let size = 20;
-      if (!Number.isNaN(sizeAsNumber) && !(sizeAsNumber > 20) && !(sizeAsNumber < 1)) {
-        size = sizeAsNumber;
-      }
-      const response = await Trip.showAllTrip(page-1,size);
-      const busData = await Buses.showAllBus(page-1,size);
-      const busOperatorData = await Bus_Operators.showAllBusOperator(page-1,size);
-      console.log('busData',busData);
-      console.log('busOperatorData',busOperatorData);
-      console.log('response',response);
-      const updatedResponse = response.map(tripData=>{
-        const busName =busData.find(bus=>bus.id==tripData.id);
-        const busoperatorname =busOperatorData.find(busoperator=>busoperator.id===tripData.busOperatorId);
-        return{
-          ...tripData,
-          busName,
-          busoperatorname
+      try {
+        let page = 1;
+        if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
+          page = pageAsNumber;
         }
-      })
-      return response;
-    } catch (error) {
-      console.error(error);
-      throw new Error('Error deleting Trip');
-    }
+    
+        let size = 20;
+        if (!Number.isNaN(sizeAsNumber) && !(sizeAsNumber > 20) && !(sizeAsNumber < 1)) {
+          size = sizeAsNumber;
+        }
+    
+        const { count, rows } = await Trip.showAllTrip(page - 1, size);
+        const busData = await Buses.showAllBus(page - 1, size);
+        const busOperatorData = await Bus_Operators.showAllBusOperator(page - 1, size);
+    
+        const updatedResponse = rows.map(tripData => {
+          const bus_name = busData.rows.find(bus => bus.id == tripData.bus_id)?.name;
+          const bus_operator_name = busOperatorData.rows.find(busoperator => busoperator.id == tripData.operator_id)?.name;
+    
+          const { bus_id, operator_id, ...dataValues } = tripData.dataValues;
+    
+          return {
+            id: tripData.id,
+            bus_name,
+            bus_operator_name,
+            ...dataValues,
+          };
+        });
+    
+        return { rows: updatedResponse, count };
+      } catch (error) {
+        console.error(error);
+        throw new Error('Error retrieving Trip data');
+      }
   }
   else
   {
-    const response = await Trip.showAllTrip()
-    return response;
+      const response = await Trip.showAllTrip();
+      const busData = await Buses.showAllBus();
+      const busOperatorData = await Bus_Operators.showAllBusOperator();
+      const updatedResponse = response.map(tripData => {
+      const bus_name = busData.find(bus => bus.id == tripData.bus_id)?.name;
+      const bus_operator_name = busOperatorData.find(busoperator => busoperator.id == tripData.operator_id)?.name;
+
+      const { bus_id, operator_id, ...dataValues } = tripData.dataValues;
+
+      return {
+        id: tripData.id,
+        bus_name,
+        bus_operator_name,
+        ...dataValues,
+      };
+    });
+    return updatedResponse;
   }
   }
 module.exports={

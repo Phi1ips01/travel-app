@@ -1,6 +1,8 @@
 const Sequelize = require('sequelize');
 const { sequelize } = require('../../models');
 const Bus = require('../../models/bus')(sequelize)
+const Bus_Operators = require('../../models/bus_operator')(sequelize)
+
 
 async function createControllerBus(data){
     try{
@@ -41,32 +43,51 @@ async function updateControllerBus(busId, data) {
       throw new Error('Error fetching data from bus');
     }
   }
-  async function showAllControllerBus(pageAsNumber,sizeAsNumber) {
-    if(pageAsNumber || sizeAsNumber)
-    {
-    try {
-      let page = 1;
-      if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
-        page = pageAsNumber;
+  async function showAllControllerBus(pageAsNumber, sizeAsNumber) {
+    if (pageAsNumber || sizeAsNumber) {
+      try {
+        let page = 1;
+        if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
+          page = pageAsNumber;
+        }
+  
+        let size = 20;
+        if (!Number.isNaN(sizeAsNumber) && !(sizeAsNumber > 20) && !(sizeAsNumber < 1)) {
+          size = sizeAsNumber;
+        }
+  
+        const { rows,count } = await Bus.showAllBus(page - 1, size);
+        const busOperatorData = await Bus_Operators.showAllBusOperator(page - 1, size);
+        const updatedBus = rows.map(busData => {
+          const bus_operator_name = busOperatorData.rows.find(busoperator => busoperator.id == busData.bus_operator_id)?.name;
+          const { bus_operator_id, ...dataValues } = busData.dataValues;
+          return {
+            id: busData.id,
+            bus_operator_name,
+            ...dataValues,
+          };
+        });
+        return { rows: updatedBus, count };
+      } catch (error) {
+        console.error(error);
+        throw new Error('Error retrieving Bus data');
       }
-
-      let size = 20;
-      if (!Number.isNaN(sizeAsNumber) && !(sizeAsNumber > 20) && !(sizeAsNumber < 1)) {
-        size = sizeAsNumber;
-      }
-      const response = await Bus.showAllBus(page-1,size);
-      return response;
-    } catch (error) {
-      console.error(error);
-      throw new Error('Error deleting Bus');
+    } else {
+      const response = await Bus.showAllBus();
+      const busOperatorData = await Bus_Operators.showAllBusOperator();
+      const updatedBus = response.map(busData => {
+        const bus_operator_name = busOperatorData.find(busoperator => busoperator.id == busData.bus_operator_id)?.name;
+        const { bus_operator_id, ...dataValues } = busData.dataValues;
+        return {
+          id: busData.id,
+          bus_operator_name,
+          ...dataValues,
+        };
+      });
+      return updatedBus
     }
   }
-  else
-  {
-    const response = await Bus.showAllBus()
-    return response;
-  }
-  }
+  
   
 module.exports={
     createControllerBus,

@@ -47,7 +47,7 @@ async function updateControllerBusOperator(BusOperatorId, data) {
       throw new Error('Error fetching data from Bus Operator');
     }
   }
-  async function showAllControllerBusOperator(pageAsNumber,sizeAsNumber) {
+  async function showAllControllerBusOperator(pageAsNumber,sizeAsNumber,search,keyword) {
     console.log("controller1",pageAsNumber,sizeAsNumber)
     if(pageAsNumber || sizeAsNumber)
     {
@@ -62,7 +62,7 @@ async function updateControllerBusOperator(BusOperatorId, data) {
         size = sizeAsNumber;
       }
       console.log("controller",page,size)
-      const response = await BusOperator.showAllBusOperator(page-1,size);
+      const response = await BusOperator.showAllBusOperator(page-1,size,search,keyword);
       return response;
     } catch (error) {
       console.error(error);

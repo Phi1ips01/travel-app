@@ -80,7 +80,7 @@ async function updateControllerTrip(TripId, newData) {
       throw new Error('Error fetching data from Trip');
     }
   }
-  async function showAllControllerTrip(pageAsNumber,sizeAsNumber) {
+  async function showAllControllerTrip(pageAsNumber,sizeAsNumber,search,keyword) {
     if(pageAsNumber || sizeAsNumber)
     {
       try {
@@ -94,7 +94,7 @@ async function updateControllerTrip(TripId, newData) {
           size = sizeAsNumber;
         }
     
-        const { count, rows } = await Trip.showAllTrip(page - 1, size);
+        const { count, rows } = await Trip.showAllTrip(page - 1, size,search,keyword);
         const busData = await Buses.showAllBus(page - 1, size);
         const busOperatorData = await Bus_Operators.showAllBusOperator(page - 1, size);
     
@@ -102,7 +102,7 @@ async function updateControllerTrip(TripId, newData) {
           const bus_name = busData.rows.find(bus => bus.id == tripData.bus_id)?.name;
           const bus_operator_name = busOperatorData.rows.find(busoperator => busoperator.id == tripData.operator_id)?.name;
     
-          const { bus_id, operator_id, ...dataValues } = tripData.dataValues;
+          const {  ...dataValues } = tripData.dataValues;
     
           return {
             id: tripData.id,

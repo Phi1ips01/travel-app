@@ -91,7 +91,10 @@ async function showAllTripHandler(req,res)
         const pageAsNumber = Number.parseInt(req.query.page);
         const sizeAsNumber = Number.parseInt(req.query.size);
         console.log("agea",pageAsNumber,sizeAsNumber)
-        const response = await showAllControllerTrip(pageAsNumber,sizeAsNumber);
+        const search = req.query.search?req.query.search:null
+        const keyword = req.query.keyword?req.query.keyword:null
+        console.log("search and keyword trip",search,keyword)
+        const response = await showAllControllerTrip(pageAsNumber,sizeAsNumber,search,keyword);
         console.log("response handler",response)
     res.status(200).json({ response });
   } catch (error) {

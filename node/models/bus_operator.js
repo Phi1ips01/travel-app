@@ -3,6 +3,8 @@ const {
   Model,DataTypes
 } = require('sequelize');
 module.exports = (sequelize) => {
+  const { Op } = require('sequelize');
+
   class Bus_operator extends Model {
     
     static async createBusOperator(data) {
@@ -111,18 +113,31 @@ static async updateTotalAmountAndProfitBusOperatorOnUpdate(busOperatorID, newBus
     static async showOneBusOperator(busOperatorId) {
       return await this.findByPk(busOperatorId);
     }
-    static async showAllBusOperator(page, size) {
+    static async showAllBusOperator(page, size,search,keyword) {
       if (page || size) {
         const offset = page * size; // Calculate the offset for pagination
-    
         try {
+          if(search && keyword)
+          {
+            let whereClause = {}
+            whereClause[search] = { [Op.like]: `%${keyword}%` }
+            const result =await this.findAndCountAll({
+              where: whereClause,
+              limit: size,
+              offset: offset,
+              order: [['id', 'DESC']] 
+            })
+            return result
+          }
+        else{
           const result = await this.findAndCountAll({
             limit: size,
             offset: offset,
-            order: [['id', 'DESC']] // Order by id in descending order
+            order: [['id', 'DESC']] 
           });
-    
+      
           return result;
+        }
         } catch (error) {
           // Handle errors appropriately
           console.error('Error fetching data:', error);

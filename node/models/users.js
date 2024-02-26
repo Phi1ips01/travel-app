@@ -3,6 +3,8 @@ const {
   Model,DataTypes
 } = require('sequelize');
 module.exports = (sequelize) => {
+  const { Op } = require('sequelize');
+
   class Users extends Model {
     static async createUser(data) {
       const userCreate = await this.create(data);
@@ -35,29 +37,42 @@ module.exports = (sequelize) => {
       whereClause[attributeName]=attributeValue
       return this.findOne({where:whereClause})
     }
-    static async showAllUser(page, size) {
+    static async showAllUser(page, size,search,keyword) {
       if (page || size) {
-      const offset = page * size; // Calculate the offset for pagination
-    
-      try {
-        const result = await this.findAndCountAll({
-          limit: size,
-          offset: offset,
-          order: [['id', 'DESC']] // Replace 'columnName' with the actual column name you want to sort by
+        const offset = page * size; // Calculate the offset for pagination
+        try {
+          if(search && keyword)
+          {
+            let whereClause = {}
+            whereClause[search] = { [Op.like]: `%${keyword}%` }
+            const result =await this.findAndCountAll({
+              where: whereClause,
+              limit: size,
+              offset: offset,
+              order: [['id', 'DESC']] 
+            })
+            return result
+          }
+        else{
+          const result = await this.findAndCountAll({
+            limit: size,
+            offset: offset,
+            order: [['id', 'DESC']] 
+          });
+      
+          return result;
+        }
+        } catch (error) {
+          // Handle errors appropriately
+          console.error('Error fetching data:', error);
+          throw error; // Rethrow the error to be handled by the caller
+        }
+      } else {
+        const result = await this.findAll({
+          order: [['id', 'DESC']] // Order by id in ascending order
         });
-    
         return result;
-      } catch (error) {
-        // Handle errors appropriately
-        console.error('Error fetching data:', error);
-        throw error; // Rethrow the error to be handled by the caller
       }
-    } else {
-      const result = await this.findAll({
-        order: [['id', 'DESC']] // Order by id in ascending order
-      });
-      return result;
-    }
     }
     /**
     

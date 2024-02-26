@@ -42,7 +42,7 @@ async function updateControllerUser(UserId, data) {
       throw new Error('Error fetching data from User');
     }
   }
-  async function showAllControllerUser(pageAsNumber,sizeAsNumber) {
+  async function showAllControllerUser(pageAsNumber,sizeAsNumber,search,keyword) {
     if(pageAsNumber || sizeAsNumber)
     {
     try {
@@ -55,8 +55,8 @@ async function updateControllerUser(UserId, data) {
       if (!Number.isNaN(sizeAsNumber) && !(sizeAsNumber > 20) && !(sizeAsNumber < 1)) {
         size = sizeAsNumber;
       }
-      console.log("contorler",page,size)
-      const response = await User.showAllUser(page-1,size);
+      console.log("contorler",search,keyword)
+      const response = await User.showAllUser(page-1,size,search,keyword);
       return response;
     } catch (error) {
       console.error(error);

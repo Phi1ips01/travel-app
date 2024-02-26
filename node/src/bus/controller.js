@@ -43,7 +43,7 @@ async function updateControllerBus(busId, data) {
       throw new Error('Error fetching data from bus');
     }
   }
-  async function showAllControllerBus(pageAsNumber, sizeAsNumber) {
+  async function showAllControllerBus(pageAsNumber, sizeAsNumber,search,keyword) {
     if (pageAsNumber || sizeAsNumber) {
       try {
         let page = 1;
@@ -55,12 +55,11 @@ async function updateControllerBus(busId, data) {
         if (!Number.isNaN(sizeAsNumber) && !(sizeAsNumber > 20) && !(sizeAsNumber < 1)) {
           size = sizeAsNumber;
         }
-  
-        const { rows,count } = await Bus.showAllBus(page - 1, size);
-        const busOperatorData = await Bus_Operators.showAllBusOperator(page - 1, size);
+          const { rows,count } = await Bus.showAllBus(page - 1, size,search,keyword);
+        const busOperatorData = await Bus_Operators.showAllBusOperator();
         const updatedBus = rows.map(busData => {
           const bus_operator_name = busOperatorData.rows.find(busoperator => busoperator.id == busData.bus_operator_id)?.name;
-          const { bus_operator_id, ...dataValues } = busData.dataValues;
+          const { ...dataValues } = busData.dataValues;
           return {
             id: busData.id,
             bus_operator_name,

@@ -61,15 +61,22 @@ async function destroyBusHandler(req,res)
     }
 }
 async function showAllBusHandler(req,res)
-{
+{   
     if(req.query.page && req.query.size)
     {
     try{
         const pageAsNumber = Number.parseInt(req.query.page);
         const sizeAsNumber = Number.parseInt(req.query.size);
         console.log("agea",pageAsNumber,sizeAsNumber)
-        const response = await showAllControllerBus(pageAsNumber,sizeAsNumber);
-    res.status(200).json({ response });
+
+        const search = req.query.search?req.query.search:null
+        const keyword = req.query.keyword?req.query.keyword:null
+        console.log("search and keyword bus",search,keyword)
+        const response = await showAllControllerBus(pageAsNumber,sizeAsNumber,search,keyword)
+        console.log(response)
+        res.status(200).json({ response });
+
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

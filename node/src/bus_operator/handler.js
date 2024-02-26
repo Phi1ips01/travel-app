@@ -65,7 +65,10 @@ async function showAllBusOperatorHandler(req,res)
             const pageAsNumber = Number.parseInt(req.query.page);
             const sizeAsNumber = Number.parseInt(req.query.size);
             console.log("agea",pageAsNumber,sizeAsNumber)
-            const response = await showAllControllerBusOperator(pageAsNumber,sizeAsNumber);
+            const search = req.query.search?req.query.search:null
+            const keyword = req.query.keyword?req.query.keyword:null
+            console.log("search and keyword bus operator",search,keyword)
+            const response = await showAllControllerBusOperator(pageAsNumber,sizeAsNumber,search,keyword);
         res.status(200).json({ response });
       } catch (error) {
         console.error(error);

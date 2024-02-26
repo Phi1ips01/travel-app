@@ -2,6 +2,7 @@ const {
   Model,DataTypes
 } = require('sequelize');
 module.exports = (sequelize) => {
+  const { Op } = require('sequelize');
   const Bus_operators = require('./bus_operator');
   const Trips = require('./trip')
 
@@ -123,18 +124,31 @@ module.exports = (sequelize) => {
     static async showOneBus(busId) {
       return await this.findByPk(busId);
     }
-    static async showAllBus(page, size) {
+    static async showAllBus(page, size, search, keyword) {
       if (page || size) {
       const offset = page * size; // Calculate the offset for pagination
-    
       try {
+        if(search && keyword)
+        {
+          let whereClause = {}
+          whereClause[search] = { [Op.like]: `%${keyword}%` }
+          const result =await this.findAndCountAll({
+            where: whereClause,
+            limit: size,
+            offset: offset,
+            order: [['id', 'DESC']] 
+          })
+          return result
+        }
+      else{
         const result = await this.findAndCountAll({
           limit: size,
           offset: offset,
-          order: [['id', 'DESC']] // Replace 'columnName' with the actual column name you want to sort by
+          order: [['id', 'DESC']] 
         });
     
         return result;
+      }
       } catch (error) {
         // Handle errors appropriately
         console.error('Error fetching data:', error);

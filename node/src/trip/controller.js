@@ -35,23 +35,25 @@ async function updateControllerTrip(TripId, newData) {
     const updatedTrip = await Trip.updateTrip(TripId, newData);
 
     // Calculate changes in trip data
-    const totalAmountChange = updatedTrip.total_amount - oldTrip.total_amount;
-    const operatorId = updatedTrip.operator_id;
 
+    const operatorId = updatedTrip.operator_id;
+    const oldBus = await Buses.showOneBus(updatedTrip.bus_id) 
     // Update the associated bus
     const updatedBus = await Buses.updateTotalAmountAndShareDeductedBusOnUpdate(
       updatedTrip.bus_id,
       updatedTrip.total_amount,
       oldTrip.total_amount
     );
+      console.log("updated bus controller trip",updatedBus)
 
     // Update the associated bus operator
+    
     const updatedBusOperator = await Bus_Operators.updateTotalAmountAndProfitBusOperatorOnUpdate(
       operatorId,
       updatedBus.total_amount,
       updatedBus.share_deducted_amount,
-      oldTrip.total_amount,
-      oldTrip.share_deducted_amount
+      oldBus.total_amount,
+      oldBus.share_deducted_amount
     );
 
     console.log("Trip updated successfully.");

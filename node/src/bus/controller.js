@@ -57,13 +57,14 @@ async function updateControllerBus(busId, data) {
         }
           const { rows,count } = await Bus.showAllBus(page - 1, size,search,keyword);
         const busOperatorData = await Bus_Operators.showAllBusOperator();
+        console.log("bus controler showall",busOperatorData)
         const updatedBus = rows.map(busData => {
-          const bus_operator_name = busOperatorData.rows.find(busoperator => busoperator.id == busData.bus_operator_id)?.name;
-          const { ...dataValues } = busData.dataValues;
+          const bus_operator_name = busOperatorData.find(busoperator => busoperator.id == busData.bus_operator_id)?.name;
+          // const { ...dataValues } = busData.dataValues;
           return {
             id: busData.id,
             bus_operator_name,
-            ...dataValues,
+            ...busData.dataValues,
           };
         });
         return { rows: updatedBus, count };
@@ -73,10 +74,13 @@ async function updateControllerBus(busId, data) {
       }
     } else {
       const response = await Bus.showAllBus();
+
       const busOperatorData = await Bus_Operators.showAllBusOperator();
+      console.log("bus controler showall",busOperatorData)
+
       const updatedBus = response.map(busData => {
         const bus_operator_name = busOperatorData.find(busoperator => busoperator.id == busData.bus_operator_id)?.name;
-        const { bus_operator_id, ...dataValues } = busData.dataValues;
+        const {...dataValues } = busData.dataValues;
         return {
           id: busData.id,
           bus_operator_name,

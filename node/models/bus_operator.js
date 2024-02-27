@@ -36,6 +36,7 @@ console.log("profit",busProfit)
             { where: { id: busOperatorID } }
         );
         const updatedBus = await this.findOne({ where: { id: busOperatorID } });
+        console.log("updated bus",updatedBus)
     } catch (error) {
         console.error(error);
         throw new Error('Error updating Bus Operator');
@@ -51,7 +52,6 @@ static async updateTotalAmountAndProfitBusOperatorOnUpdate(busOperatorID, newBus
     if (!busOperator) {
       throw new Error('Bus Operator not found');
     }
-
     console.log("Existing total_amount:", busOperator.total_amount);
     console.log("Existing profit:", busOperator.profit);
     console.log("New bus total amount:", newBusTotalAmount);
@@ -59,13 +59,14 @@ static async updateTotalAmountAndProfitBusOperatorOnUpdate(busOperatorID, newBus
 
     // Calculate the changes in total amount and profit
     const totalAmountChange = parseInt(newBusTotalAmount, 10) - parseInt(oldBusTotalAmount, 10);
-    const profitChange = parseInt(newBusProfit, 10) - parseInt(oldBusProfit, 10);
-
+    // const profitChange = parseInt(busOperator.profit, 10) - parseInt(oldBusProfit, 10);
+    const profitChange = (newBusTotalAmount-newBusProfit) - (oldBusTotalAmount-oldBusProfit)
     // Calculate new total_amount for bus operator
     const newTotalAmount = parseInt(busOperator.total_amount) + totalAmountChange;
+    
 
     // Calculate new profit for bus operator
-    const newProfit = parseInt(busOperator.profit) + profitChange;
+    const newProfit = busOperator.profit+profitChange
 
     console.log("New total_amount for bus operator:", newTotalAmount);
     console.log("New profit for bus operator:", newProfit);
@@ -153,9 +154,7 @@ static async updateTotalAmountAndProfitBusOperatorOnUpdate(busOperatorID, newBus
     
     
     static associate(models) {
-      // Bus_operator.hasMany(models.Trip, { foreignKey: 'operator_id', as: 'trips' });
 
-      // define association here
     }
   }
 

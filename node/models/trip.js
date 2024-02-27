@@ -14,6 +14,7 @@ module.exports = (sequelize) => {
       return tripCreate;
     }
     static async updateTrip(tripId, data) {
+      console.log("trip_id",tripId)
       const trip = await this.findByPk(tripId);
     
       if (!trip) {

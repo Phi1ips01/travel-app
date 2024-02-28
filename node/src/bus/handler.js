@@ -28,7 +28,7 @@ async function createBusHandler(req,res)
 async function updateBusHandler(req,res)
 {
     try{
-        console.log("req,bdy",req.body)
+        // console.log("req,bdy",req.body)
         const { id } = req.body;
         const busData = {
             bus_operator_id:req.body.bus_operator_id,
@@ -49,13 +49,13 @@ async function updateBusHandler(req,res)
 async function destroyBusHandler(req,res)
 {
     try{
-        console.log("handlerdeleteBUs", req.body)
+        // console.log("handlerdeleteBUs", req.body)
 
         const { id } = req.body;
         const response = await destroyControllerBus(id);
     res.status(200).json({ response });
   } catch (error) {
-    console.log(req)
+    // console.log(req)
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
     }
@@ -67,13 +67,13 @@ async function showAllBusHandler(req,res)
     try{
         const pageAsNumber = Number.parseInt(req.query.page);
         const sizeAsNumber = Number.parseInt(req.query.size);
-        console.log("agea",pageAsNumber,sizeAsNumber)
+        // console.log("agea",pageAsNumber,sizeAsNumber)
 
         const search = req.query.search?req.query.search:null
         const keyword = req.query.keyword?req.query.keyword:null
         console.log("search and keyword bus",search,keyword)
         const response = await showAllControllerBus(pageAsNumber,sizeAsNumber,search,keyword)
-        console.log(response)
+        // console.log(response)
         res.status(200).json({ response });
 
     

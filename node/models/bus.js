@@ -13,37 +13,23 @@ module.exports = (sequelize) => {
     }
     static async updateBus(busId, data) {
       const bus = await this.findByPk(busId);
-    
       if (!bus) {
         throw new Error('Bus not found');
       }
-    
       await bus.update(data);
       return bus;
     }
     static async updateTotalAmountAndShareDeductedBus(busID, data) {
       try {
         console.log("Updating bus with ID:", busID);
-    
-        // Find the bus by ID
-        const bus = await this.findOne({ where: { id: busID } });
-    
+        const bus = await this.findOne({ where: { id: busID } }); 
         if (!bus) {
           throw new Error('Bus not found');
         }
-    
-        console.log("Existing total_amount:", bus.total_amount);
-        console.log("Data to be added:", data);
-    
         // Calculate new total_amount
         const newTotalAmount = parseInt(bus.total_amount, 10) + parseInt(data, 10);
-    
         // Calculate share_deducted_amount
-        const newShareDeductedAmount = newTotalAmount - (newTotalAmount * bus.share) / 100;
-    
-        console.log("New total_amount:", newTotalAmount);
-        console.log("New share_deducted_amount:", newShareDeductedAmount);
-    
+        const newShareDeductedAmount = newTotalAmount - (newTotalAmount * parseInt(bus.share)) / 100;    
         // Update Buses table
         await this.update(
           {
@@ -52,12 +38,9 @@ module.exports = (sequelize) => {
           },
           { where: { id: busID } }
         );
-    
-        console.log("Bus updated successfully.");
-        
+        console.log("Bus updated successfully. updateTotalAmountAndShareDeductedBus");
         // Fetch the updated bus
         const updatedBus = await this.findOne({ where: { id: busID } });
-    
         return updatedBus;
       } catch (error) {
         console.error("Error updating bus:", error);
@@ -66,32 +49,13 @@ module.exports = (sequelize) => {
     }
     static async updateTotalAmountAndShareDeductedBusOnUpdate(busID, newData, oldData) {
       try {
-        console.log("Updating bus with ID:", busID);
-    
-        // Find the bus by ID
         const bus = await this.findOne({ where: { id: busID } });
-    
         if (!bus) {
           throw new Error('Bus not found');
         }
-    
-        console.log("Existing total_amount:", bus.total_amount);
-        console.log("Data before update:", oldData);
-        console.log("Data after update:", newData);
-    
-        // Calculate the change in data
-        const dataChange = parseInt(newData, 10) - parseInt(oldData, 10);
-    
-        // Calculate new total_amount
-        const newTotalAmount = parseInt(bus.total_amount, 10) + dataChange;
-    
-        // Calculate share_deducted_amount
-        const newShareDeductedAmount = newTotalAmount - (newTotalAmount * bus.share) / 100;
-    
-        console.log("New total_amount:", newTotalAmount);
-        console.log("New share_deducted_amount:", newShareDeductedAmount);
-    
-        // Update Buses table
+        const dataChange = parseInt(newData) - parseInt(oldData);
+        const newTotalAmount = parseInt(bus.total_amount) + dataChange;
+        const newShareDeductedAmount = newTotalAmount - (newTotalAmount * parseInt(bus.share)) / 100;
         await this.update(
           {
             total_amount: newTotalAmount,
@@ -99,20 +63,44 @@ module.exports = (sequelize) => {
           },
           { where: { id: busID } }
         );
-    
-        console.log("Bus updated successfully.");
-    
-        // Fetch the updated bus
+        console.log("Bus updated successfully. updateTotalAmountAndShareDeductedBusOnUpdate");
         const updatedBus = await this.findOne({ where: { id: busID } });
-    
         return updatedBus;
       } catch (error) {
         console.error("Error updating bus:", error);
         throw error; // Rethrow the error for proper handling
       }
     }
-    
-    
+    static async updateOldTaAndSda(bus_id,total_amount)
+    {
+      const bus = await this.findOne({ where: { id: bus_id } });
+      const subtractedOldTotalAmount = parseInt(bus.total_amount)-total_amount
+      const subtractedOldSDA = subtractedOldTotalAmount-(subtractedOldTotalAmount*parseInt(bus.share)/100)
+      await this.update(
+        {
+          total_amount: subtractedOldTotalAmount,
+          share_deducted_amount: subtractedOldSDA,
+        },
+        { where: { id: bus_id } }
+      );
+      const updatedBus = await this.findOne({ where: { id: bus_id } });
+        return updatedBus;
+    }
+    static async updatedNewTaAndSdaBus(bus_id,total_amount)
+    {
+      const bus = await this.findOne({ where: { id: bus_id } });
+      const addNewTotalAmount = parseInt(bus.total_amount)+total_amount
+      const addNewSDA = addNewTotalAmount-(addNewTotalAmount*parseInt(bus.share)/100)
+      await this.update(
+        {
+          total_amount: addNewTotalAmount,
+          share_deducted_amount: addNewSDA,
+        },
+        { where: { id: bus_id } }
+      );
+      const updatedBus = await this.findOne({ where: { id: bus_id } });
+        return updatedBus;
+    }
     static async deleteBus(busId) {
       const bus = await this.findByPk(busId);
       if (!bus) {

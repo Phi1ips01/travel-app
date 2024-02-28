@@ -77,8 +77,8 @@ module.exports = (sequelize) => {
     
   
     static associate(models) {
-      console.log("Models",Model)
-      console.log("models",models)
+      // console.log("Models",Model)
+      // console.log("models",models)
       // this.belongsTo(models.Bus, { foreignKey: 'bus_id', as: 'Bus' });
       // this.belongsTo(models.Bus_operator, { foreignKey: 'bus_operator_id', as: 'Bus_operator' });
 

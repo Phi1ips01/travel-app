@@ -57,7 +57,7 @@ async function updateControllerBus(busId, data) {
         }
           const { rows,count } = await Bus.showAllBus(page - 1, size,search,keyword);
         const busOperatorData = await Bus_Operators.showAllBusOperator();
-        console.log("bus controler showall",busOperatorData)
+        // console.log("bus controler showall",busOperatorData)
         const updatedBus = rows.map(busData => {
           const bus_operator_name = busOperatorData.find(busoperator => busoperator.id == busData.bus_operator_id)?.name;
           // const { ...dataValues } = busData.dataValues;
@@ -76,7 +76,7 @@ async function updateControllerBus(busId, data) {
       const response = await Bus.showAllBus();
 
       const busOperatorData = await Bus_Operators.showAllBusOperator();
-      console.log("bus controler showall",busOperatorData)
+      // console.log("bus controler showall",busOperatorData)
 
       const updatedBus = response.map(busData => {
         const bus_operator_name = busOperatorData.find(busoperator => busoperator.id == busData.bus_operator_id)?.name;

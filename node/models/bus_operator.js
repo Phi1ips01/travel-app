@@ -18,15 +18,11 @@ module.exports = (sequelize) => {
         if (!busOperator) {
             throw new Error('Bus Operator not found');
         }
-
         // Calculate new total_amount for bus_operator
         const newTotalAmount = parseInt(busOperator.total_amount) + parseInt(busTotalAmount);
-console.log("busOperatorProfit",busOperator.profit)
-console.log("busToalamount",busTotalAmount)
-console.log("profit",busProfit)
         // Calculate new profit for bus_operator
         const newProfit = parseInt(busOperator.profit) + parseInt(busTotalAmount - busProfit);
-        console.log("newprofit", newProfit)
+        // console.log("newprofit", newProfit)
         // Update Bus_Operators table
         await this.update(
             {
@@ -36,42 +32,27 @@ console.log("profit",busProfit)
             { where: { id: busOperatorID } }
         );
         const updatedBus = await this.findOne({ where: { id: busOperatorID } });
-        console.log("updated bus",updatedBus)
+        // console.log("updated bus",updatedBus)
     } catch (error) {
         console.error(error);
         throw new Error('Error updating Bus Operator');
     }
 }
-static async updateTotalAmountAndProfitBusOperatorOnUpdate(busOperatorID, newBusTotalAmount, newBusProfit, oldBusTotalAmount, oldBusProfit) {
+static async updateTotalAmountAndProfitBusOperatorOnUpdate(busOperatorID, totalAmountChange,profitChange ) {
   try {
-    console.log("Updating bus operator with ID:", busOperatorID);
-
-    // Find the bus operator by ID
-    const busOperator = await this.findOne({ where: { id: busOperatorID } });
-
+    const busOperator = await this.findOne({ where: { id: busOperatorID } })
     if (!busOperator) {
       throw new Error('Bus Operator not found');
     }
-    console.log("Existing total_amount:", busOperator.total_amount);
-    console.log("Existing profit:", busOperator.profit);
-    console.log("New bus total amount:", newBusTotalAmount);
-    console.log("New bus profit:", newBusProfit);
+    const newTotalAmount = busOperator.total_amount + totalAmountChange
+    const newProfit = busOperator.profit +profitChange
+    console.log(".")
+    console.log("..",totalAmountChange)
+    console.log("..",profitChange)
 
-    // Calculate the changes in total amount and profit
-    const totalAmountChange = parseInt(newBusTotalAmount, 10) - parseInt(oldBusTotalAmount, 10);
-    // const profitChange = parseInt(busOperator.profit, 10) - parseInt(oldBusProfit, 10);
-    const profitChange = (newBusTotalAmount-newBusProfit) - (oldBusTotalAmount-oldBusProfit)
-    // Calculate new total_amount for bus operator
-    const newTotalAmount = parseInt(busOperator.total_amount) + totalAmountChange;
-    
-
-    // Calculate new profit for bus operator
-    const newProfit = busOperator.profit+profitChange
-
-    console.log("New total_amount for bus operator:", newTotalAmount);
-    console.log("New profit for bus operator:", newProfit);
-
-    // Update Bus_Operators table
+    console.log("..",newTotalAmount)
+    console.log("..",newProfit)
+    console.log(".")
     await this.update(
       {
         total_amount: newTotalAmount,
@@ -79,12 +60,8 @@ static async updateTotalAmountAndProfitBusOperatorOnUpdate(busOperatorID, newBus
       },
       { where: { id: busOperatorID } }
     );
-
-    console.log("Bus operator updated successfully.");
-
-    // Fetch the updated bus operator
+    console.log("Bus operator updated successfully. updateTotalAmountAndProfitBusOperatorOnUpdate");
     const updatedBusOperator = await this.findOne({ where: { id: busOperatorID } });
-
     return updatedBusOperator;
   } catch (error) {
     console.error("Error updating bus operator:", error);
@@ -92,7 +69,56 @@ static async updateTotalAmountAndProfitBusOperatorOnUpdate(busOperatorID, newBus
   }
 }
 
+  static async updateOldTaAndProfitBusOperator(operator_id,total_amount,oldOperatorProfit)
+  {
+    const operator = await this.findOne({ where: { id: operator_id } });
+    const substractOldTotalAmount = parseInt(operator.total_amount)-total_amount
+    const substractProfit = parseInt(operator.profit)-oldOperatorProfit
+    await this.update(
+      {
+        total_amount: substractOldTotalAmount,
+        profit: substractProfit,
+      },
+      { where: { id: operator_id } }
+    );
+    console.log("Bus operator updated successfully updateOldTaAndProfitBusOperator.");
+    const updatedBusOperator = await this.findOne({ where: { id: operator_id } });
+    return updatedBusOperator;
+  }
+  static async updatedNewTaAndProfitBusOperator(operator_id,total_amount,newOperatorProfit)
+  {
+    const operator = await this.findOne({ where: { id: operator_id } });
+    const addNewTotalAmount = parseInt(operator.total_amount)+total_amount
+    const addNewProfit = parseInt(operator.profit)+newOperatorProfit
+    await this.update(
+      {
+        total_amount: addNewTotalAmount,
+        profit: addNewProfit,
+      },
+      { where: { id: operator_id } }
+    );
+  }
+  static async updateProfitBusOperator(operator_id,totalChange,profitChange)
+  {
+    const operator = await this.findOne({ where: { id: operator_id } });
+    const newTotalAmount = parseInt(operator.total_amount) + totalChange
+    const profit = parseInt(operator.profit)+profitChange
+    
+    await this.update(
+      {
+        total_amount:newTotalAmount,
+        profit: profit,
+      },
+      { where: { id: operator_id } }
+    );
 
+    
+    console.log("Bus operator updated successfully. updateProfitBusOperator");
+    const updatedBusOperator = await this.findOne({ where: { id: operator_id } });
+    console.log("....",updatedBusOperator);
+
+    return updatedBusOperator;
+  }
     static async updateBusOperator(busOperatorId, data) {
       const busOperator = await this.findByPk(busOperatorId);
     

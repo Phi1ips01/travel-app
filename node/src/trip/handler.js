@@ -76,7 +76,7 @@ async function updateTripHandler(req,res)
 async function destroyTripHandler(req,res)
 {
     try{
-        console.log("trip handler",req.body)
+        // console.log("trip handler",req.body)
         const { id } = req.body;
         const response = await destroyControllerTrip(id);
     res.status(200).json({ response });
@@ -97,7 +97,7 @@ async function showAllTripHandler(req,res)
         const keyword = req.query.keyword?req.query.keyword:null
         console.log("search and keyword trip",search,keyword)
         const response = await showAllControllerTrip(pageAsNumber,sizeAsNumber,search,keyword);
-        console.log("response handler",response)
+        // console.log("response handler",response)
     res.status(200).json({ response });
   } catch (error) {
     console.error(error);

@@ -8,11 +8,11 @@ const Bus_Operators = require('../../models/bus_operator')(sequelize)
 async function createControllerTrip(data){
     try{
     const tripResponse = await Trip.createTrip(data)
-    console.log("createcontroleertrip",tripResponse.total_amount)
-    console.log("createcontroleertrip",tripResponse.dataValues.operator_id)
+    // console.log("createcontroleertrip",tripResponse.total_amount)
+    // console.log("createcontroleertrip",tripResponse.dataValues.operator_id)
 
     const busResponse = await Buses.updateTotalAmountAndShareDeductedBus(tripResponse.bus_id, tripResponse.total_amount);
-    console.log("controllerrrr",busResponse.dataValues)
+    // console.log("controllerrrr",busResponse.dataValues)
     const busOperatorResponse = await Bus_Operators.updateTotalAmountAndProfitBusOperator(
       tripResponse.dataValues.operator_id,
       busResponse.dataValues.total_amount,
@@ -30,39 +30,78 @@ async function updateControllerTrip(TripId, newData) {
   try {
     // Retrieve the old trip data
     const oldTrip = await Trip.showOneTrip(TripId);
-
-    // Update the trip with the new data
+    const oldBus = await Buses.showOneBus(oldTrip.bus_id)
     const updatedTrip = await Trip.updateTrip(TripId, newData);
+    if(parseInt(oldTrip.operator_id)!==parseInt(updatedTrip.operator_id))
+    {
+      const oldOperator = await Bus_Operators.showOneBusOperator(oldTrip.operator_id)
+       await Buses.updateOldTaAndSda(
+        oldBus.id,
+        oldTrip.total_amount,
+        // subtract the total amount from the old bus
+      )
+        const updatedNewBus = await Buses.updatedNewTaAndSdaBus(
+          updatedTrip.bus_id,
+        updatedTrip.total_amount
+        // add the total amount to the new bus
+        )
+     
+        const oldOperatorProfit = (parseInt(oldBus.total_amount)-parseInt(oldBus.share_deducted_amount))
+        const newOperatorProfit = parseInt(updatedNewBus.total_amount)-parseInt(updatedNewBus.share_deducted_amount)
+        await Bus_Operators.updateOldTaAndProfitBusOperator(
+          oldTrip.operator_id,oldBus.total_amount,oldOperatorProfit
+      )
+        await Bus_Operators.updatedNewTaAndProfitBusOperator(
+          updatedTrip.operator_id,updatedBus.total_amount,newOperatorProfit
+      )
+      console.log("if(parseInt(oldTrip.operator_id)!==parseInt(updatedTrip.operator_id))");
 
+    }
     // Calculate changes in trip data
-
-    const operatorId = updatedTrip.operator_id;
-    const oldBus = await Buses.showOneBus(updatedTrip.bus_id) 
-    // Update the associated bus
-    const updatedBus = await Buses.updateTotalAmountAndShareDeductedBusOnUpdate(
-      updatedTrip.bus_id,
-      updatedTrip.total_amount,
-      oldTrip.total_amount
-    );
-      console.log("updated bus controller trip",updatedBus)
-
-    // Update the associated bus operator
+    else if((parseInt(oldTrip.operator_id) === parseInt(updatedTrip.operator_id)) && (parseInt(oldTrip.bus_id) !== parseInt(updatedTrip.bus_id)))
+    {
+      const updatedOldBus = await Buses.updateOldTaAndSda(
+        oldBus.id,
+        oldTrip.total_amount,
+        // subtract the total amount from the old bus
+      )
+        const updatedNewBus = await Buses.updatedNewTaAndSdaBus(
+        updatedTrip.bus_id,
+        updatedTrip.total_amount
+        // add the total amount to the new bus
+        )
+        const totalAmountChange = updatedNewBus.total_amount - oldBus.total_amount
+        const OperatorProfit = (updatedNewBus.total_amount-updatedNewBus.share_deducted_amount) - (oldBus.total_amount-oldBus.share_deducted_amount)
+        const updatedBusOperator = await Bus_Operators.updateProfitBusOperator(oldTrip.operator_id,totalAmountChange,OperatorProfit)
+  
+      console.log(" && parseInt(oldTrip.bus_id) !== parseInt(updatedTrip.bus_id)");
+      return updatedTrip;
+    }
+    else 
+    {
+      const operatorId = parseInt(updatedTrip.operator_id);
+      const updatedBus = await Buses.updateTotalAmountAndShareDeductedBusOnUpdate(
+        updatedTrip.bus_id,
+        updatedTrip.total_amount,
+        oldTrip.total_amount
+      );
+      const totalAmountChange = parseInt(updatedBus.total_amount) - parseInt(oldBus.total_amount)
+      const profitChange = (parseInt(updatedBus.total_amount)-parseInt(updatedBus.share_deducted_amount))-(parseInt(oldBus.total_amount)-parseInt(oldBus.share_deducted_amount)) 
+      const updatedBusOperator = await Bus_Operators.updateTotalAmountAndProfitBusOperatorOnUpdate(
+        operatorId,
+        totalAmountChange,
+        profitChange
+      );
+      console.log("Trip else");
+      return updatedTrip;
+    }
     
-    const updatedBusOperator = await Bus_Operators.updateTotalAmountAndProfitBusOperatorOnUpdate(
-      operatorId,
-      updatedBus.total_amount,
-      updatedBus.share_deducted_amount,
-      oldBus.total_amount,
-      oldBus.share_deducted_amount
-    );
-
-    console.log("Trip updated successfully.");
-    return updatedTrip;
   } catch (error) {
     console.error(error);
     throw new Error('Error updating Trip');
   }
 }
+
 
   async function destroyControllerTrip(TripId) {
     try {

@@ -11,7 +11,7 @@ module.exports = (sequelize) => {
       const busOperatorCreate = await this.create(data);
       return busOperatorCreate;
     }
-    static async updateTotalAmountAndProfitBusOperator(busOperatorID, busTotalAmount, busProfit) {
+    static async updateTotalAmountAndProfitBusOperator(busOperatorID, busTotalAmountChange, busProfitChange) {
     try {
         const busOperator = await this.findOne({ where: { id: busOperatorID } });
 
@@ -19,9 +19,9 @@ module.exports = (sequelize) => {
             throw new Error('Bus Operator not found');
         }
         // Calculate new total_amount for bus_operator
-        const newTotalAmount = parseInt(busOperator.total_amount) + parseInt(busTotalAmount);
+        const newTotalAmount = parseInt(busOperator.total_amount) + parseInt(busTotalAmountChange);
         // Calculate new profit for bus_operator
-        const newProfit = parseInt(busOperator.profit) + parseInt(busTotalAmount - busProfit);
+        const newProfit = parseInt(busOperator.profit) + busProfitChange
         // console.log("newprofit", newProfit)
         // Update Bus_Operators table
         await this.update(

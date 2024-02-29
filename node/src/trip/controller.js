@@ -8,15 +8,21 @@ const Bus_Operators = require('../../models/bus_operator')(sequelize)
 async function createControllerTrip(data){
     try{
     const tripResponse = await Trip.createTrip(data)
+    const oldBusResponse = await Buses.showOneBus(tripResponse.bus_id)
     // console.log("createcontroleertrip",tripResponse.total_amount)
     // console.log("createcontroleertrip",tripResponse.dataValues.operator_id)
 
     const busResponse = await Buses.updateTotalAmountAndShareDeductedBus(tripResponse.bus_id, tripResponse.total_amount);
     // console.log("controllerrrr",busResponse.dataValues)
+      const totalAmountChange = parseInt(busResponse.dataValues.total_amount) - parseInt(oldBusResponse.dataValues.total_amount)
+      const oldProfit = (parseInt(oldBusResponse.dataValues.total_amount)-parseInt(oldBusResponse.dataValues.share_deducted_amount))
+      const newProfit= (parseInt(busResponse.dataValues.total_amount)-parseInt(busResponse.dataValues.share_deducted_amount))
+      const profitChange = newProfit-oldProfit
+      console.log("oldnewprofit",totalAmountChange,profitChange)
     const busOperatorResponse = await Bus_Operators.updateTotalAmountAndProfitBusOperator(
       tripResponse.dataValues.operator_id,
-      busResponse.dataValues.total_amount,
-      busResponse.dataValues.share_deducted_amount
+      totalAmountChange,
+      profitChange
       );
       return tripResponse
     }
@@ -32,6 +38,7 @@ async function updateControllerTrip(TripId, newData) {
     const oldTrip = await Trip.showOneTrip(TripId);
     const oldBus = await Buses.showOneBus(oldTrip.bus_id)
     const updatedTrip = await Trip.updateTrip(TripId, newData);
+    console.log("trip controller newdata",newData)
     if(parseInt(oldTrip.operator_id)!==parseInt(updatedTrip.operator_id))
     {
       const oldOperator = await Bus_Operators.showOneBusOperator(oldTrip.operator_id)
@@ -52,7 +59,7 @@ async function updateControllerTrip(TripId, newData) {
           oldTrip.operator_id,oldBus.total_amount,oldOperatorProfit
       )
         await Bus_Operators.updatedNewTaAndProfitBusOperator(
-          updatedTrip.operator_id,updatedBus.total_amount,newOperatorProfit
+          updatedTrip.operator_id,updatedNewBus.total_amount,newOperatorProfit
       )
       console.log("if(parseInt(oldTrip.operator_id)!==parseInt(updatedTrip.operator_id))");
 
@@ -125,13 +132,14 @@ async function updateControllerTrip(TripId, newData) {
     if(pageAsNumber || sizeAsNumber)
     {
       try {
+        console.log("search ",keyword)
         let page = 1;
         if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
           page = pageAsNumber;
         }
     
-        let size = 20;
-        if (!Number.isNaN(sizeAsNumber) && !(sizeAsNumber > 20) && !(sizeAsNumber < 1)) {
+        let size = 10;
+        if (!Number.isNaN(sizeAsNumber) && !(sizeAsNumber > 10) && !(sizeAsNumber < 1)) {
           size = sizeAsNumber;
         }
     

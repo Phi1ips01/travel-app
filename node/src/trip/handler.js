@@ -9,7 +9,6 @@ const {
 async function createTripHandler(req,res)
 {
     try{
-        console.log("req.body",req.body)
         const TripData = {
             operator_id:req.body.operator_id ,
             bus_id:req.body.bus_id ,
@@ -22,8 +21,7 @@ async function createTripHandler(req,res)
             destination_point:req.body.destination_point ,
             seat_numbers:req.body.seat_numbers,
             address:req.body.address,
-            date_of_journey:"2024-02-29",
-            // req.body.date_of_journey,
+            date_of_journey:req.body.date_of_journey,
             age: req.body.age,
             number_of_tickets:req.body.number_of_tickets ,
             total_amount: req.body.total_amount,
@@ -45,7 +43,7 @@ async function updateTripHandler(req,res)
 
         
         const TripData = {
-            operator_id:req.body.bus_operator_id ,
+            operator_id:req.body.operator_id ,
             bus_id:req.body.bus_id,
             trip_id:req.body.trip_id ,
             customer_name:req.body.customer_name ,
@@ -56,8 +54,7 @@ async function updateTripHandler(req,res)
             destination_point:req.body.destination_point ,
             seat_numbers:req.body.seat_numbers,
             address:req.body.address,
-            date_of_journey:"2024-02-29",
-            // req.body.date_of_journey,
+            date_of_journey:req.body.date_of_journey,
             age: req.body.age,
             number_of_tickets:req.body.number_of_tickets ,
             total_amount: req.body.total_amount,
@@ -96,8 +93,9 @@ async function showAllTripHandler(req,res)
         const search = req.query.search?req.query.search:null
         const keyword = req.query.keyword?req.query.keyword:null
         console.log("search and keyword trip",search,keyword)
+        console.log("response handler",req.body)
+
         const response = await showAllControllerTrip(pageAsNumber,sizeAsNumber,search,keyword);
-        // console.log("response handler",response)
     res.status(200).json({ response });
   } catch (error) {
     console.error(error);

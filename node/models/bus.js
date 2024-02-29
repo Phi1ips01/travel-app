@@ -26,11 +26,13 @@ module.exports = (sequelize) => {
         if (!bus) {
           throw new Error('Bus not found');
         }
+        
         // Calculate new total_amount
         const newTotalAmount = parseInt(bus.total_amount, 10) + parseInt(data, 10);
         // Calculate share_deducted_amount
         const newShareDeductedAmount = newTotalAmount - (newTotalAmount * parseInt(bus.share)) / 100;    
         // Update Buses table
+        console.log(newTotalAmount,newShareDeductedAmount)
         await this.update(
           {
             total_amount: newTotalAmount,
@@ -150,13 +152,7 @@ module.exports = (sequelize) => {
     }
     }
   
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // this.hasMany(models.Trip, { foreignKey: 'bus_id', as: 'trips' });
 
       // define association here
     }

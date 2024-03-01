@@ -140,6 +140,27 @@ static async updateTotalAmountAndProfitBusOperatorOnUpdate(busOperatorID, totalA
     static async showOneBusOperator(busOperatorId) {
       return await this.findByPk(busOperatorId);
     }
+    static async findBusOperatorIdsByKeyword(keyword)
+    {
+    try {
+      const busOperators = await this.findAll({
+        where: {
+          name: {
+            [Op.like]: `%${keyword}%` // Search for keyword in the 'name' column
+          }
+        },
+        attributes: ['id'] // Only retrieve the 'id' column
+      });
+  
+      // Extract and return an array of bus operator IDs
+      const busOperatorIds = busOperators.map(operator => operator.id);
+      return busOperatorIds;
+    } catch (error) {
+      console.error('Error finding bus operator IDs:', error);
+      throw error;
+    }
+  };
+
     static async showAllBusOperator(page, size,search,keyword) {
       if (page || size) {
         const offset = page * size; // Calculate the offset for pagination

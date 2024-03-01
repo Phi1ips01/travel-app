@@ -40,8 +40,6 @@ async function updateTripHandler(req,res)
 {
     try{
         const { id } = req.body;
-
-        
         const TripData = {
             operator_id:req.body.operator_id ,
             bus_id:req.body.bus_id,
@@ -73,7 +71,6 @@ async function updateTripHandler(req,res)
 async function destroyTripHandler(req,res)
 {
     try{
-        // console.log("trip handler",req.body)
         const { id } = req.body;
         const response = await destroyControllerTrip(id);
     res.status(200).json({ response });
@@ -93,8 +90,6 @@ async function showAllTripHandler(req,res)
         const search = req.query.search?req.query.search:null
         const keyword = req.query.keyword?req.query.keyword:null
         console.log("search and keyword trip",search,keyword)
-        console.log("response handler",req.body)
-
         const response = await showAllControllerTrip(pageAsNumber,sizeAsNumber,search,keyword);
     res.status(200).json({ response });
   } catch (error) {
@@ -124,6 +119,4 @@ module.exports={
     destroyTripHandler,
     showOneTripHandler,
     showAllTripHandler
-
-
 }

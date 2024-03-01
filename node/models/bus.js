@@ -114,6 +114,27 @@ module.exports = (sequelize) => {
     static async showOneBus(busId) {
       return await this.findByPk(busId);
     }
+    static async showAllBusByOperatorIds(page,size,operatorIds)
+    {
+      try {
+        const offset = page * size;
+        const buses = await this.findAndCountAll({
+          where: {
+            bus_operator_id: {
+              [Op.in]: operatorIds // Search for bus_operator_id in the provided array of IDs
+            }
+          },
+          limit: size,
+            offset: offset,
+            order: [['id', 'DESC']] 
+        });
+    
+        return buses;
+      } catch (error) {
+        console.error('Error finding buses by operator IDs:', error);
+        throw error;
+      }
+    }
     static async showAllBus(page, size, search, keyword) {
       if (page || size) {
       const offset = page * size; // Calculate the offset for pagination

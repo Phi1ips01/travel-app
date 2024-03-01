@@ -3,17 +3,11 @@ const { sequelize } = require('../../models');
 const Trip = require('../../models/trip')(sequelize)
 const Buses = require('../../models/bus')(sequelize)
 const Bus_Operators = require('../../models/bus_operator')(sequelize)
-
-
 async function createControllerTrip(data){
     try{
     const tripResponse = await Trip.createTrip(data)
     const oldBusResponse = await Buses.showOneBus(tripResponse.bus_id)
-    // console.log("createcontroleertrip",tripResponse.total_amount)
-    // console.log("createcontroleertrip",tripResponse.dataValues.operator_id)
-
     const busResponse = await Buses.updateTotalAmountAndShareDeductedBus(tripResponse.bus_id, tripResponse.total_amount);
-    // console.log("controllerrrr",busResponse.dataValues)
       const totalAmountChange = parseInt(busResponse.dataValues.total_amount) - parseInt(oldBusResponse.dataValues.total_amount)
       const oldProfit = (parseInt(oldBusResponse.dataValues.total_amount)-parseInt(oldBusResponse.dataValues.share_deducted_amount))
       const newProfit= (parseInt(busResponse.dataValues.total_amount)-parseInt(busResponse.dataValues.share_deducted_amount))

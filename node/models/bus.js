@@ -172,6 +172,18 @@ module.exports = (sequelize) => {
       return result;
     }
     }
+    static async findBusIdsByKeyword(keyword) {
+      const buses = await this.findAll({
+          where: {
+              name: {
+                  [Op.like]: `%${keyword}%`
+              }
+          },
+          attributes: ['id']
+      });
+      return buses.map(bus => bus.id);
+  }
+  
   
     static associate(models) {
 

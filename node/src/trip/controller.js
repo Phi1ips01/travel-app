@@ -122,66 +122,95 @@ async function updateControllerTrip(TripId, newData) {
       throw new Error('Error fetching data from Trip');
     }
   }
-  async function showAllControllerTrip(pageAsNumber,sizeAsNumber,search,keyword) {
-    if(pageAsNumber || sizeAsNumber)
-    {
-      try {
-        console.log("search ",keyword)
-        let page = 1;
-        if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
-          page = pageAsNumber;
+  async function showAllControllerTrip(pageAsNumber, sizeAsNumber, search, keyword) {
+    if (pageAsNumber || sizeAsNumber) {
+        try {
+            let page = 1;
+            if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
+                page = pageAsNumber;
+            }
+
+            let size = 10;
+            if (!Number.isNaN(sizeAsNumber) && !(sizeAsNumber > 10) && !(sizeAsNumber < 1)) {
+                size = sizeAsNumber;
+            }
+
+            if (search === "operator_id") {
+                const busOperatorIds = await Bus_Operators.findBusOperatorIdsByKeyword(keyword);
+                const { rows, count } = await Trip.showAllTripByOperatorIds(page - 1, size, busOperatorIds);
+                const busOperatorData = await Bus_Operators.showAllBusOperator();
+                const updatedTrip = rows.map(tripData => {
+                    const bus_operator_name = busOperatorData.find(busoperator => busoperator.id == tripData.operator_id)?.name;
+                    const bus_name = busData.find(bus => bus.id == tripData.bus_id)?.name;
+                    return {
+                        id: tripData.id,
+                        bus_operator_name,
+                        bus_name,
+                        ...tripData.dataValues,
+                    };
+                });
+                return { rows: updatedTrip, count };
+            } else if (search === "bus_id") {
+                const busIds = await Buses.findBusIdsByKeyword(keyword);
+                const { rows, count } = await Trip.showAllTripByBusIds(page - 1, size, busIds);
+                const busData = await Buses.showAllBus();
+                const updatedTrip = rows.map(tripData => {
+                    const bus_name = busData.find(bus => bus.id == tripData.bus_id)?.name;
+                    const bus_operator_name = busOperatorData.find(busoperator => busoperator.id == tripData.operator_id)?.name;
+                    return {
+                        id: tripData.id,
+                        bus_name,
+                        bus_operator_name,
+                        ...tripData.dataValues,
+                    };
+                });
+                return { rows: updatedTrip, count };
+            } else {
+                const { count, rows } = await Trip.showAllTrip(page - 1, size, search, keyword);
+                const busData = await Buses.showAllBus();
+                const busOperatorData = await Bus_Operators.showAllBusOperator();
+
+                const updatedResponse = rows.map(tripData => {
+                    const bus_name = busData.rows.find(bus => bus.id == tripData.bus_id)?.name;
+                    const bus_operator_name = busOperatorData.rows.find(busoperator => busoperator.id == tripData.operator_id)?.name;
+
+                    const { ...dataValues } = tripData.dataValues;
+
+                    return {
+                        id: tripData.id,
+                        bus_name,
+                        bus_operator_name,
+                        ...dataValues,
+                    };
+                });
+
+                return { rows: updatedResponse, count };
+            }
+        } catch (error) {
+            console.error(error);
+            throw new Error('Error retrieving Trip data');
         }
-    
-        let size = 10;
-        if (!Number.isNaN(sizeAsNumber) && !(sizeAsNumber > 10) && !(sizeAsNumber < 1)) {
-          size = sizeAsNumber;
-        }
-    
-        const { count, rows } = await Trip.showAllTrip(page - 1, size,search,keyword);
-        const busData = await Buses.showAllBus(page - 1, size);
-        const busOperatorData = await Bus_Operators.showAllBusOperator(page - 1, size);
-    
-        const updatedResponse = rows.map(tripData => {
-          const bus_name = busData.rows.find(bus => bus.id == tripData.bus_id)?.name;
-          const bus_operator_name = busOperatorData.rows.find(busoperator => busoperator.id == tripData.operator_id)?.name;
-    
-          const {  ...dataValues } = tripData.dataValues;
-    
-          return {
-            id: tripData.id,
-            bus_name,
-            bus_operator_name,
-            ...dataValues,
-          };
+    } else {
+        const response = await Trip.showAllTrip();
+        const busData = await Buses.showAllBus();
+        const busOperatorData = await Bus_Operators.showAllBusOperator();
+        const updatedResponse = response.map(tripData => {
+            const bus_name = busData.find(bus => bus.id == tripData.bus_id)?.name;
+            const bus_operator_name = busOperatorData.find(busoperator => busoperator.id == tripData.operator_id)?.name;
+
+            const { bus_id, operator_id, ...dataValues } = tripData.dataValues;
+
+            return {
+                id: tripData.id,
+                bus_name,
+                bus_operator_name,
+                ...dataValues,
+            };
         });
-    
-        return { rows: updatedResponse, count };
-      } catch (error) {
-        console.error(error);
-        throw new Error('Error retrieving Trip data');
-      }
-  }
-  else
-  {
-      const response = await Trip.showAllTrip();
-      const busData = await Buses.showAllBus();
-      const busOperatorData = await Bus_Operators.showAllBusOperator();
-      const updatedResponse = response.map(tripData => {
-      const bus_name = busData.find(bus => bus.id == tripData.bus_id)?.name;
-      const bus_operator_name = busOperatorData.find(busoperator => busoperator.id == tripData.operator_id)?.name;
+        return updatedResponse;
+    }
+}
 
-      const { bus_id, operator_id, ...dataValues } = tripData.dataValues;
-
-      return {
-        id: tripData.id,
-        bus_name,
-        bus_operator_name,
-        ...dataValues,
-      };
-    });
-    return updatedResponse;
-  }
-  }
 module.exports={
     createControllerTrip,
     updateControllerTrip,

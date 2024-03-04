@@ -198,6 +198,18 @@ static async updateTotalAmountAndProfitBusOperatorOnUpdate(busOperatorID, totalA
         return result;
       }
     }
+    static async findBusOperatorIdsByKeyword(keyword) {
+      const busOperators = await this.findAll({
+          where: {
+              name: {
+                  [Op.like]: `%${keyword}%`
+              }
+          },
+          attributes: ['id']
+      });
+      return busOperators.map(busOperator => busOperator.id);
+  }
+  
     
     
     static associate(models) {

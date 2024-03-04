@@ -74,6 +74,30 @@ module.exports = (sequelize) => {
         return result;
       }
     }
+    static async showAllTripByOperatorIds(page, size, operatorIds) {
+      const { rows, count } = await this.findAndCountAll({
+          where: {
+              operator_id: {
+                  [Op.in]: operatorIds
+              }
+          },
+          limit: size,
+          offset: page * size
+      });
+      return { rows, count };
+  }
+  static async showAllTripByBusIds(page, size, busIds) {
+    const { rows, count } = await this.findAndCountAll({
+        where: {
+            bus_id: {
+                [Op.in]: busIds
+            }
+        },
+        limit: size,
+        offset: page * size
+    });
+    return { rows, count };
+}
     
   
     static associate(models) {

@@ -139,6 +139,7 @@ async function updateControllerTrip(TripId, newData) {
                 const busOperatorIds = await Bus_Operators.findBusOperatorIdsByKeyword(keyword);
                 const { rows, count } = await Trip.showAllTripByOperatorIds(page - 1, size, busOperatorIds);
                 const busOperatorData = await Bus_Operators.showAllBusOperator();
+                const busData = await Buses.showAllBus()
                 const updatedTrip = rows.map(tripData => {
                     const bus_operator_name = busOperatorData.find(busoperator => busoperator.id == tripData.operator_id)?.name;
                     const bus_name = busData.find(bus => bus.id == tripData.bus_id)?.name;
@@ -153,6 +154,7 @@ async function updateControllerTrip(TripId, newData) {
             } else if (search === "bus_id") {
                 const busIds = await Buses.findBusIdsByKeyword(keyword);
                 const { rows, count } = await Trip.showAllTripByBusIds(page - 1, size, busIds);
+                const busOperatorData = await Bus_Operators.showAllBusOperator();
                 const busData = await Buses.showAllBus();
                 const updatedTrip = rows.map(tripData => {
                     const bus_name = busData.find(bus => bus.id == tripData.bus_id)?.name;
@@ -169,10 +171,12 @@ async function updateControllerTrip(TripId, newData) {
                 const { count, rows } = await Trip.showAllTrip(page - 1, size, search, keyword);
                 const busData = await Buses.showAllBus();
                 const busOperatorData = await Bus_Operators.showAllBusOperator();
-
+              console.log("trip controller shwoall",rows)
+              console.log("controller trip busdata",busData)
+              console.log("trip controller operatordata",busOperatorData)
                 const updatedResponse = rows.map(tripData => {
-                    const bus_name = busData.rows.find(bus => bus.id == tripData.bus_id)?.name;
-                    const bus_operator_name = busOperatorData.rows.find(busoperator => busoperator.id == tripData.operator_id)?.name;
+                    const bus_name = busData.find(bus => bus.id == tripData.bus_id)?.name;
+                    const bus_operator_name = busOperatorData.find(busoperator => busoperator.id == tripData.operator_id)?.name;
 
                     const { ...dataValues } = tripData.dataValues;
 

@@ -67,7 +67,7 @@ async function showAllBusHandler(req,res)
     try{
         const pageAsNumber = Number.parseInt(req.query.page);
         const sizeAsNumber = Number.parseInt(req.query.size);
-        // console.log("agea",pageAsNumber,sizeAsNumber)
+        console.log("bus agea",pageAsNumber,sizeAsNumber)
 
         const search = req.query.search?req.query.search:null
         const keyword = req.query.keyword?req.query.keyword:null

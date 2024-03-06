@@ -74,6 +74,7 @@ module.exports = (sequelize) => {
         return result;
       }
     }
+    
     static async showAllTripByOperatorIds(page, size, operatorIds) {
       const { rows, count } = await this.findAndCountAll({
           where: {
@@ -98,7 +99,21 @@ module.exports = (sequelize) => {
     });
     return { rows, count };
 }
-    
+    // Assuming your Trip model has a method called `findAll` for fetching trips
+static async showAllTripByDate(page, size, startDate, endDate) {
+  const trips = await this.findAndCountAll({
+      where: {
+          date_of_journey: {
+              [Op.between]: [startDate, endDate],
+          },
+      },
+      offset: page * size,
+      limit: size,
+  });
+
+  return trips;
+}
+
   
     static associate(models) {
 

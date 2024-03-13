@@ -75,11 +75,29 @@ async function updateControllerBusOperator(BusOperatorId, data) {
     return response;
   }
   }
+  async function getTotalAmountAndProfit() {
+    try {
+      const total_ta_result = await BusOperator.aggregate('total_amount', 'SUM');
+      const total_ta = parseFloat(total_ta_result);
+  
+      const total_profit_result = await BusOperator.aggregate('profit', 'SUM');
+      const total_profit = parseFloat(total_profit_result);
+  
+      return { total_ta, total_profit };
+    } catch (error) {
+      console.error(error);
+      throw new Error('Error fetching total amount and profit');
+    }
+  }
+  
+  
+  
   
 module.exports={
     createControllerBusOperator,
     updateControllerBusOperator,
     destroyControllerBusOperator,
     showAllControllerBusOperator,
-    showOneControllerBusOperator
+    showOneControllerBusOperator,
+    getTotalAmountAndProfit
 }

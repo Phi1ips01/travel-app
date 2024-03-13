@@ -137,7 +137,7 @@ static async showAllTripByDate(page, size, startDate, endDate) {
     total_amount: DataTypes.INTEGER,
     paid: DataTypes.INTEGER,
     payment_status: DataTypes.STRING,
-    remarks: DataTypes.STRING,
+    boarding_time: DataTypes.STRING,
     agents: DataTypes.STRING,
   }, {
     sequelize,

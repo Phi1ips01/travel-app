@@ -3,7 +3,8 @@ const {
     updateControllerBusOperator,
     showAllControllerBusOperator,
     showOneControllerBusOperator,
-    destroyControllerBusOperator
+    destroyControllerBusOperator,
+    getTotalAmountAndProfit
 } = require('./controller')
 
 async function createBusOperatorHandler(req,res)
@@ -92,6 +93,18 @@ async function showOneBusOperatorHandler(req,res)
     res.status(500).json({ error: 'Internal Server Error' });
     }
 }
+async function getTotalAmountAndProfitHandler(req,res)
+{
+    try{
+        const response = await getTotalAmountAndProfit()
+        console.log("bus operator handler het total amoubt ",response)
+        res.status(200).json({response})
+    }
+    catch(error){
+        console.error(error)
+        res.status(500).json({error:'Internal Server Error'})
+    }
+}
 
 
 module.exports={
@@ -99,7 +112,8 @@ module.exports={
     updateBusOperatorHandler,
     destroyBusOperatorHandler,
     showOneBusOperatorHandler,
-    showAllBusOperatorHandler
+    showAllBusOperatorHandler,
+    getTotalAmountAndProfitHandler
 
 
 }

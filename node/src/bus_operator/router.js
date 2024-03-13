@@ -6,7 +6,8 @@ const {
   updateBusOperatorHandler,
   destroyBusOperatorHandler,
   showAllBusOperatorHandler,
-  showOneBusOperatorHandler
+  showOneBusOperatorHandler,
+  getTotalAmountAndProfitHandler
 } = require('./handler')
 
 router.use(authenticateToken)
@@ -14,6 +15,7 @@ router.use(authenticateToken)
 router.post("/add", createBusOperatorHandler);
 router.get("/showAll", showAllBusOperatorHandler );
 router.get("/showOne", showOneBusOperatorHandler);
+router.get("/getTotal", getTotalAmountAndProfitHandler);
 router.put('/update', updateBusOperatorHandler);
 router.delete("/delete",destroyBusOperatorHandler);
 

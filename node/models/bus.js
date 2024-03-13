@@ -30,7 +30,7 @@ module.exports = (sequelize) => {
         // Calculate new total_amount
         const newTotalAmount = parseInt(bus.total_amount, 10) + parseInt(data, 10);
         // Calculate share_deducted_amount
-        const newShareDeductedAmount = newTotalAmount - (newTotalAmount * parseInt(bus.share)) / 100;    
+        const newShareDeductedAmount = (newTotalAmount * parseInt(bus.share)) / 100;    
         // Update Buses table
         console.log(newTotalAmount,newShareDeductedAmount)
         await this.update(

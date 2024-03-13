@@ -27,7 +27,7 @@ async function createTripHandler(req,res)
             total_amount: req.body.total_amount,
             payment_status: req.body.payment_status,
             paid: req.body.paid,
-            remarks: req.body.remarks,
+            boarding_time: req.body.boarding_time,
             agents: req.body.agents,
         };
         const response = await createControllerTrip(TripData);
@@ -58,7 +58,7 @@ async function updateTripHandler(req,res)
             total_amount: req.body.total_amount,
             payment_status: req.body.payment_status,
             paid: req.body.paid,
-            remarks: req.body.remarks,
+            boarding_time: req.body.boarding_time,
             agents: req.body.agents,
         };
         const response = await updateControllerTrip(id, TripData);

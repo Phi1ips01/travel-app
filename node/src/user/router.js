@@ -15,7 +15,7 @@ router.use(authenticateToken)
 
 router.post("/add", createUserHandler);
 router.get("/showAll", showAllUserHandler );
-router.get("/showOneByPk", showOneByPkUserHandler);
+router.get("/showOne", showOneByPkUserHandler);
 router.put('/update', updateUserHandler);
 router.delete("/delete",destroyUserHandler);
 

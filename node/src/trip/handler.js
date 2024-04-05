@@ -106,6 +106,7 @@ async function showOneTripHandler(req,res)
 {
     try{
         const { id } = req.query;
+        console.log("shoeonw")
         const response = await showOneControllerTrip(id);
     res.status(200).json({ response });
   } catch (error) {

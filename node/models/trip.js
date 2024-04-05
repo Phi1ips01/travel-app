@@ -14,14 +14,14 @@ module.exports = (sequelize) => {
       return tripCreate;
     }
     static async updateTrip(tripId, data) {
-      console.log("trip_id",tripId)
       const trip = await this.findByPk(tripId);
-    
+      
       if (!trip) {
         throw new Error('trip not found');
       }
-    
-      await trip.update(data);
+      
+     await trip.update(data);
+      console.log("trip_model_update",trip)
       return trip;
     }
       
@@ -131,7 +131,7 @@ static async showAllTripByDate(page, size, startDate, endDate) {
     destination_point: DataTypes.STRING,
     seat_numbers:DataTypes.STRING,
     address: DataTypes.STRING,
-    date_of_journey:DataTypes.DATE,
+    date_of_journey:DataTypes.STRING,
     age: DataTypes.INTEGER,
     number_of_tickets: DataTypes.INTEGER,
     total_amount: DataTypes.INTEGER,

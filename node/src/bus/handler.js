@@ -12,7 +12,6 @@ async function createBusHandler(req,res)
         console.log("handler")
         const busData = {
             bus_operator_id:req.body.bus_operator_id,
-            // bus_id:req.body.bus_operator_id,
             name:req.body.name,
             type: req.body.type,
             share:req.body.share,
@@ -28,11 +27,9 @@ async function createBusHandler(req,res)
 async function updateBusHandler(req,res)
 {
     try{
-        // console.log("req,bdy",req.body)
         const { id } = req.body;
         const busData = {
             bus_operator_id:req.body.bus_operator_id,
-            // bus_id:req.body.bus_operator_id,
             name:req.body.name,
             type: req.body.type,
             share:req.body.share,
@@ -104,6 +101,4 @@ module.exports={
     destroyBusHandler,
     showOneBusHandler,
     showAllBusHandler
-
-
 }

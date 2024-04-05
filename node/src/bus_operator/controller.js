@@ -49,7 +49,7 @@ async function updateControllerBusOperator(BusOperatorId, data) {
   }
   async function showAllControllerBusOperator(pageAsNumber,sizeAsNumber,search,keyword) {
     console.log("controller1",pageAsNumber,sizeAsNumber)
-    if(pageAsNumber || sizeAsNumber)
+    if(!!pageAsNumber || !!sizeAsNumber)
     {
       try {
       let page = 1;

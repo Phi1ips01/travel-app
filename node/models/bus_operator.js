@@ -60,8 +60,8 @@ static async updateTotalAmountAndProfitBusOperatorOnUpdate(busOperatorID, totalA
       },
       { where: { id: busOperatorID } }
     );
-    console.log("Bus operator updated successfully. updateTotalAmountAndProfitBusOperatorOnUpdate");
     const updatedBusOperator = await this.findOne({ where: { id: busOperatorID } });
+    console.log("Bus operator updated successfully. updateTotalAmountAndProfitBusOperatorOnUpdate",updatedBusOperator);
     return updatedBusOperator;
   } catch (error) {
     console.error("Error updating bus operator:", error);
@@ -165,7 +165,7 @@ static async updateTotalAmountAndProfitBusOperatorOnUpdate(busOperatorID, totalA
       if (page || size) {
         const offset = page * size; // Calculate the offset for pagination
         try {
-          if(search && keyword)
+          if(!!search && !!keyword)
           {
             let whereClause = {}
             whereClause[search] = { [Op.like]: `%${keyword}%` }

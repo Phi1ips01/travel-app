@@ -153,34 +153,34 @@ async function updateControllerTrip(TripId, newData) {
                 });
                 return { rows: updatedTrip, count };
             } 
-            else if(search === "date_of_journey")
-            {
-              let startDate, endDate;
-            if (keyword.length === 7) {
-                // If the keyword is a month (YYYY-MM), search for trips within that month
-                startDate = moment(keyword, 'YYYY-MM').startOf('month').toDate();
-                endDate = moment(keyword, 'YYYY-MM').endOf('month').toDate();
-            } else {
-                // If the keyword is a full date (YYYY-MM-DD), search for trips on that specific date
-                startDate = moment(keyword, 'YYYY-MM-DD').startOf('day').toDate();
-                endDate = moment(keyword, 'YYYY-MM-DD').endOf('day').toDate();
-            }
+            // else if(search === "date_of_journey")
+            // {
+            //   let startDate, endDate;
+            // if (keyword.length === 7) {
+            //     // If the keyword is a month (YYYY-MM), search for trips within that month
+            //     startDate = moment(keyword, 'YYYY-MM').startOf('month').toDate();
+            //     endDate = moment(keyword, 'YYYY-MM').endOf('month').toDate();
+            // } else {
+            //     // If the keyword is a full date (YYYY-MM-DD), search for trips on that specific date
+            //     startDate = moment(keyword, 'YYYY-MM-DD').startOf('day').toDate();
+            //     endDate = moment(keyword, 'YYYY-MM-DD').endOf('day').toDate();
+            // }
 
-            const { rows, count } = await Trip.showAllTripByDate(page - 1, size, startDate, endDate);
-            const busOperatorData = await Bus_Operators.showAllBusOperator();
-            const busData = await Buses.showAllBus();
-            const updatedTrip = rows.map(tripData => {
-                const bus_name = busData.find(bus => bus.id == tripData.bus_id)?.name;
-                const bus_operator_name = busOperatorData.find(busoperator => busoperator.id == tripData.operator_id)?.name;
-                return {
-                    id: tripData.id,
-                    bus_name,
-                    bus_operator_name,
-                    ...tripData.dataValues,
-                };
-            });
-            return { rows: updatedTrip, count };
-            }
+            // const { rows, count } = await Trip.showAllTripByDate(page - 1, size, startDate, endDate);
+            // const busOperatorData = await Bus_Operators.showAllBusOperator();
+            // const busData = await Buses.showAllBus();
+            // const updatedTrip = rows.map(tripData => {
+            //     const bus_name = busData.find(bus => bus.id == tripData.bus_id)?.name;
+            //     const bus_operator_name = busOperatorData.find(busoperator => busoperator.id == tripData.operator_id)?.name;
+            //     return {
+            //         id: tripData.id,
+            //         bus_name,
+            //         bus_operator_name,
+            //         ...tripData.dataValues,
+            //     };
+            // });
+            // return { rows: updatedTrip, count };
+            // }
             
             else if (search === "bus_id") {
                 const busIds = await Buses.findBusIdsByKeyword(keyword);
@@ -202,9 +202,9 @@ async function updateControllerTrip(TripId, newData) {
                 const { count, rows } = await Trip.showAllTrip(page - 1, size, search, keyword);
                 const busData = await Buses.showAllBus();
                 const busOperatorData = await Bus_Operators.showAllBusOperator();
-              console.log("trip controller shwoall",rows)
-              console.log("controller trip busdata",busData)
-              console.log("trip controller operatordata",busOperatorData)
+              // console.log("trip controller shwoall",rows)
+              // console.log("controller trip busdata",busData)
+              // console.log("trip controller operatordata",busOperatorData)
                 const updatedResponse = rows.map(tripData => {
                     const bus_name = busData.find(bus => bus.id == tripData.bus_id)?.name;
                     const bus_operator_name = busOperatorData.find(busoperator => busoperator.id == tripData.operator_id)?.name;

@@ -68,7 +68,7 @@ module.exports = (sequelize) => {
           throw error; // Rethrow the error to be handled by the caller
         }
       } else {
-        const result = await this.findAll({
+        const result = await this.findAndCountAll({
           order: [['id', 'DESC']] // Order by id in ascending order
         });
         return result;
